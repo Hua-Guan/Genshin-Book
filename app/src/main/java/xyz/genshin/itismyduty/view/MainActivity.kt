@@ -1,4 +1,4 @@
-package xyz.genshin.itismyduty
+package xyz.genshin.itismyduty.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
