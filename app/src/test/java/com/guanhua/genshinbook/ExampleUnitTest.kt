@@ -1,4 +1,4 @@
-package pri.guanhua.genshinbook
+package com.guanhua.genshinbook
 
 import org.junit.Test
 

@@ -7,7 +7,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "pri.guanhua.genshinbook"
+        applicationId "xyz.genshin.itismyduty"
         minSdk 21
         targetSdk 31
         versionCode 1
