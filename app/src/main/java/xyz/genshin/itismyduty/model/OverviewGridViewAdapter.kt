@@ -11,6 +11,9 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import xyz.genshin.itismyduty.R
 
+/**
+ * @author GuanHua
+ */
 class OverviewGridViewAdapter(context: Context, list: List<OverviewBean>) : BaseAdapter() {
     private var context: Context = context
     private var list: List<OverviewBean> = list

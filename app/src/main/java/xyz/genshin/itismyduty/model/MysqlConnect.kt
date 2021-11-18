@@ -3,6 +3,9 @@ package xyz.genshin.itismyduty.model
 import java.sql.Connection
 import java.sql.DriverManager
 
+/**
+ * @author GuanHua
+ */
 object MysqlConnect {
 
     //单例模式

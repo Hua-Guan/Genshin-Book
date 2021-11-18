@@ -1,5 +1,6 @@
-package xyz.genshin.itismyduty.view
+package xyz.genshin.itismyduty.view.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -9,8 +10,12 @@ import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.MysqlConnect
 import xyz.genshin.itismyduty.model.OverviewBean
 import xyz.genshin.itismyduty.model.OverviewGridViewAdapter
+import xyz.genshin.itismyduty.view.enemy.EnemyActivity
 import kotlin.concurrent.thread
 
+/**
+ * @author GuanHua
+ */
 class MainActivity : AppCompatActivity() {
     private val handle = Handler(Looper.myLooper()!!)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +49,16 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+        }
+
+        overview.setOnItemClickListener { parent, view, position, id ->
+
+            if (position == 1){
+
+                intent = Intent(this, EnemyActivity::class.java)
+                startActivity(intent)
+            }
+
         }
 
 
