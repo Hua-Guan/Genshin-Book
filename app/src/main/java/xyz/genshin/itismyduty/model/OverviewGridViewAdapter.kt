@@ -11,19 +11,23 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import xyz.genshin.itismyduty.R
 
-class OverviewGridViewAdapter(context: Context) : BaseAdapter() {
+/**
+ * @author GuanHua
+ */
+class OverviewGridViewAdapter(context: Context, list: List<OverviewBean>) : BaseAdapter() {
     private var context: Context = context
+    private var list: List<OverviewBean> = list
 
     override fun getCount(): Int {
-        return 5
+        return list.size
     }
 
     override fun getItem(position: Int): Any {
-        return position
+        return list.get(position)
     }
 
     override fun getItemId(position: Int): Long {
-        return 1
+        return list.get(position).hashCode().toLong()
     }
 
     @SuppressLint("InflateParams", "SetTextI18n")
@@ -36,9 +40,9 @@ class OverviewGridViewAdapter(context: Context) : BaseAdapter() {
             holder.image = view.findViewById(R.id.image)
             holder.typeName =  view.findViewById(R.id.type_name)
             Glide.with(view)
-                .load("https://genshin.itismyduty.xyz/Role/role.jpg")
+                .load(list.get(position).imageUri)
                 .into(holder.image)
-            holder.typeName.text = "role"
+            holder.typeName.text = list.get(position).typeName
             view?.tag = holder
         }else{
 
