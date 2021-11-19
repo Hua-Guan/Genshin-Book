@@ -11,6 +11,7 @@ import xyz.genshin.itismyduty.model.MysqlConnect
 import xyz.genshin.itismyduty.model.OverviewBean
 import xyz.genshin.itismyduty.model.OverviewGridViewAdapter
 import xyz.genshin.itismyduty.view.enemy.EnemyActivity
+import xyz.genshin.itismyduty.view.role.RoleActivity
 import kotlin.concurrent.thread
 
 /**
@@ -53,10 +54,16 @@ class MainActivity : AppCompatActivity() {
 
         overview.setOnItemClickListener { parent, view, position, id ->
 
-            if (position == 1){
+            if (position == 0){
+
+                intent = Intent(this, RoleActivity::class.java)
+                startActivity(intent)
+
+            }else if (position == 1){
 
                 intent = Intent(this, EnemyActivity::class.java)
                 startActivity(intent)
+
             }
 
         }
