@@ -1,6 +1,5 @@
 package xyz.genshin.itismyduty.model
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +13,11 @@ import xyz.genshin.itismyduty.R
 /**
  * @author GuanHua
  */
-class OverviewGridViewAdapter constructor(
+class RoleGridViewAdapter constructor(
     private var context: Context,
-    private var list: List<OverviewBean>
-    ) : BaseAdapter() {
-    //private var context: Context = context
-    //private var list: List<OverviewBean> = list
+    private var list: List<RoleBean>
+    ): BaseAdapter() {
+
 
     override fun getCount(): Int {
         return list.size
@@ -33,31 +31,38 @@ class OverviewGridViewAdapter constructor(
         return list[position].hashCode().toLong()
     }
 
-    @SuppressLint("InflateParams", "SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
         var view = convertView
         if (view == null){
             val holder = Holder()
-            //必须传入parent, 不然gridview的高度会无效
-            view = LayoutInflater.from(context).inflate(R.layout.item_overview, parent, false)
-            holder.image = view.findViewById(R.id.image)
-            holder.typeName =  view.findViewById(R.id.type_name)
+            view = LayoutInflater.from(context).inflate(R.layout.item_role, parent, false)
+            holder.roleImage = view.findViewById(R.id.role_image)
+            holder.roleName = view.findViewById(R.id.role_name)
+            view.tag = holder
+
             Glide.with(view)
-                .load(list[position].imageUri)
-                .into(holder.image)
-            holder.typeName.text = list.get(position).typeName
-            view?.tag = holder
+                .load(list[position].roleUri)
+                .into(holder.roleImage)
+
+            holder.roleName.text = list[position].roleName
         }else{
 
+            val holder = view.tag as Holder
+            Glide.with(view)
+                .load(list[position].roleUri)
+                .into(holder.roleImage)
+
+            holder.roleName.text = list[position].roleName
 
         }
+
         return view
     }
 
     class Holder{
 
-        lateinit var image: ImageView
-        lateinit var typeName: TextView
+        lateinit var roleImage: ImageView
+        lateinit var roleName: TextView
 
     }
 

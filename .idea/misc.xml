@@ -3,10 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_enemy.xml" value="0.24320652173913043" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_enemy.xml" value="0.2558876811594203" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_main.xml" value="0.2857142857142857" />
-        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_role.xml" value="0.2857142857142857" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_role.xml" value="0.2558876811594203" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_overview.xml" value="0.6285714285714287" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_role.xml" value="0.25271739130434784" />
       </map>
     </option>
   </component>
