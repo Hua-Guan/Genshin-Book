@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import android.widget.ImageView
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.MysqlConnect
 import xyz.genshin.itismyduty.model.RoleBean
@@ -25,9 +28,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class RoleFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
+    private var mView: View? = null
     private var list: List<RoleBean>? = null
     private var handler = Handler(Looper.myLooper()!!)
     private var adapter: RoleGridViewAdapter? = null
@@ -39,46 +43,71 @@ class RoleFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_role, container, false)
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_role, container, false)
+        }
+        return mView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gridView = view.findViewById(R.id.role)
+        display(view)
 
+        back(view)
 
-        list = ArrayList()
-        thread {
+    }
 
-            var conn = MysqlConnect.getMysqlConnect()
-            var stmt = conn?.createStatement()
-            var sql = "select RoleName, RoleUrl from role"
-            var rs = stmt?.executeQuery(sql)
-            if (rs != null) {
-                while (rs.next()){
-                    var role = RoleBean()
-                    role.roleName = rs.getString("RoleName")
-                    role.roleUri = "https://genshin.itismyduty.xyz/" + rs.getString("RoleUrl")
-                    (list as ArrayList<RoleBean>).add(role)
+    private fun display(view: View){
+
+        if (adapter == null) {
+            gridView = view.findViewById(R.id.role)
+            list = ArrayList()
+            thread {
+
+                val conn = MysqlConnect.getMysqlConnect()
+                val stmt = conn?.createStatement()
+                val sql = "select RoleName, RoleUrl from role"
+                val rs = stmt?.executeQuery(sql)
+                if (rs != null) {
+                    while (rs.next()) {
+                        var role = RoleBean()
+                        role.roleName = rs.getString("RoleName")
+                        role.roleUri = "https://genshin.itismyduty.xyz/" + rs.getString("RoleUrl")
+                        (list as ArrayList<RoleBean>).add(role)
+                    }
+                    adapter = context?.let { RoleGridViewAdapter(it, list as ArrayList<RoleBean>) }
+                    handler.post {
+
+                        gridView.adapter = adapter
+
+                    }
                 }
-                adapter = context?.let { RoleGridViewAdapter(it, list as ArrayList<RoleBean>) }
-                handler.post(Runnable {
-
-                    gridView.adapter = adapter
-
-                })
             }
+
+            gridView.setOnItemClickListener { parent, view, position, id ->
+
+                val bundle = bundleOf("roleName" to (list as ArrayList<RoleBean>)[position].roleName)
+                findNavController().navigate(R.id.action_roleFragment_to_roleDetailsFragment, bundle)
+
+            }
+        }
+
+    }
+
+    private fun back(view: View){
+
+        val back = view.findViewById<ImageView>(R.id.back)
+        back.setOnClickListener {
+
+            activity?.finish()
+
         }
 
     }

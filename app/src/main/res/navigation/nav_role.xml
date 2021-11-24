@@ -9,5 +9,22 @@
         android:id="@+id/roleFragment"
         android:name="xyz.genshin.itismyduty.view.role.RoleFragment"
         android:label="fragment_role"
-        tools:layout="@layout/fragment_role" />
+        tools:layout="@layout/fragment_role" >
+        <action
+            android:id="@+id/action_roleFragment_to_roleDetailsFragment"
+            app:destination="@id/roleDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/roleDetailsFragment"
+        android:name="xyz.genshin.itismyduty.view.role.RoleDetailsFragment"
+        android:label="fragment_role_details"
+        tools:layout="@layout/fragment_role_details" >
+        <argument
+            android:name="roleName"
+            app:argType="string" />
+    </fragment>
 </navigation>

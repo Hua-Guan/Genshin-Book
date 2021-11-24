@@ -44,6 +44,8 @@ class RoleGridViewAdapter constructor(
                 .load(list[position].roleUri)
                 .into(holder.roleImage)
 
+            holder.roleImage.clipToOutline = true
+
             holder.roleName.text = list[position].roleName
         }else{
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.role.RoleActivity">
+    tools:context="view.role.RoleDetailsFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_height="40dp"/>
 
         <TextView
-            android:text="角色"
+            android:id="@+id/role_name"
             android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
@@ -29,14 +29,10 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <GridView
-        android:id="@+id/role"
-        android:numColumns="4"
-        android:layout_marginTop="80dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:verticalSpacing="16dp"
-        android:layout_width="320dp"
-        android:layout_height="match_parent"/>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_role"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="80dp"/>
 
 </FrameLayout>
