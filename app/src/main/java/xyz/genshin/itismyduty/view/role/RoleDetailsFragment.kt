@@ -8,8 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import xyz.genshin.itismyduty.R
+import xyz.genshin.itismyduty.model.RolePagerViewAdapter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,6 +28,8 @@ class RoleDetailsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var mView: View? = null
+    private var roleName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +43,29 @@ class RoleDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_role_details, container, false)
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_role_details, container, false)
+        }
+        return mView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setRoleName(view)
+
+        back(view)
+
+        setPagerView(view)
+    }
+
+    private fun setRoleName(view: View){
+
         val roleName = view.findViewById<TextView>(R.id.role_name)
         roleName.text = arguments?.getString("roleName")
+
+    }
+
+    private fun back(view: View){
 
         val back = view.findViewById<ImageView>(R.id.back)
         back.setOnClickListener {
@@ -54,7 +74,20 @@ class RoleDetailsFragment : Fragment() {
 
         }
 
-        var tabs: TabLayout = view.findViewById(R.id.tab_role)
+    }
+
+    private fun setPagerView(view: View){
+        var tab: TabLayout = view.findViewById(R.id.tab_role)
+        val pager = view.findViewById<ViewPager2>(R.id.pager)
+        val adapter = arguments?.getString("roleName")?.let { RolePagerViewAdapter(this, it) }
+
+        pager.adapter = adapter
+
+        TabLayoutMediator(tab, pager){tab, position ->
+
+            tab.text = "角色信息"
+
+        }.attach()
     }
 
     companion object {
