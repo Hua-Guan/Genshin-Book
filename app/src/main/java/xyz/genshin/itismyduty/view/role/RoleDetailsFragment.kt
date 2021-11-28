@@ -85,7 +85,11 @@ class RoleDetailsFragment : Fragment() {
 
         TabLayoutMediator(tab, pager){tab, position ->
 
-            tab.text = "角色信息"
+            if (position == 0){
+                tab.text = "角色信息"
+            }else if (position == 1){
+                tab.text = "基础属性"
+            }
 
         }.attach()
     }

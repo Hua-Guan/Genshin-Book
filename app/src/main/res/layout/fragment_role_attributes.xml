@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/attack_type"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="攻击方式"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/m_attack_type"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/attack_type"
+        app:layout_constraintTop_toTopOf="@+id/attack_type" />
+
+    <TextView
+        android:id="@+id/HP"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="生命值"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/attack_type"
+        app:layout_constraintTop_toBottomOf="@+id/attack_type" />
+
+    <TextView
+        android:id="@+id/m_HP"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/HP"
+        app:layout_constraintTop_toBottomOf="@+id/attack_type" />
+
+    <TextView
+        android:id="@+id/ATK"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="攻击力"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/HP"
+        app:layout_constraintTop_toBottomOf="@+id/HP" />
+
+    <TextView
+        android:id="@+id/m_ATK"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/ATK"
+        app:layout_constraintTop_toBottomOf="@+id/m_HP" />
+
+    <TextView
+        android:id="@+id/DEF"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="防御力"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/ATK"
+        app:layout_constraintTop_toBottomOf="@+id/ATK" />
+
+    <TextView
+        android:id="@+id/m_DEF"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/DEF"
+        app:layout_constraintTop_toBottomOf="@+id/m_ATK" />
+
+    <TextView
+        android:id="@+id/elemental_mastery"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="元素精通"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/DEF"
+        app:layout_constraintTop_toBottomOf="@+id/DEF" />
+
+    <TextView
+        android:id="@+id/m_elemental_mastery"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/elemental_mastery"
+        app:layout_constraintTop_toBottomOf="@+id/m_DEF" />
+
+    <TextView
+        android:id="@+id/CRIT_rate"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="暴击率"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/elemental_mastery"
+        app:layout_constraintTop_toBottomOf="@+id/elemental_mastery" />
+
+    <TextView
+        android:id="@+id/m_CRIT_rate"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/CRIT_rate"
+        app:layout_constraintTop_toBottomOf="@+id/m_elemental_mastery" />
+
+    <TextView
+        android:id="@+id/CRIT_DMG"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="暴击伤害"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/CRIT_rate"
+        app:layout_constraintTop_toBottomOf="@+id/CRIT_rate" />
+
+    <TextView
+        android:id="@+id/m_CRIT_DMG"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/CRIT_DMG"
+        app:layout_constraintTop_toBottomOf="@+id/m_CRIT_rate" />
+
+    <TextView
+        android:id="@+id/healing_bonus"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="治疗加成"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/CRIT_DMG"
+        app:layout_constraintTop_toBottomOf="@+id/CRIT_DMG" />
+
+    <TextView
+        android:id="@+id/m_healing_bonus"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/healing_bonus"
+        app:layout_constraintTop_toBottomOf="@+id/m_CRIT_DMG" />
+
+    <TextView
+        android:id="@+id/incoming_healing_bonus"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="受治疗加成"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/healing_bonus"
+        app:layout_constraintTop_toBottomOf="@+id/healing_bonus" />
+
+    <TextView
+        android:id="@+id/m_incoming_healing_bonus"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/incoming_healing_bonus"
+        app:layout_constraintTop_toBottomOf="@+id/m_healing_bonus" />
+
+    <TextView
+        android:id="@+id/energy_recharge"
+        android:layout_width="112dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="元素充能效率"
+        android:textSize="10sp"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="@+id/incoming_healing_bonus"
+        app:layout_constraintTop_toBottomOf="@+id/incoming_healing_bonus" />
+
+    <TextView
+        android:id="@+id/m_energy_recharge"
+        android:layout_width="160dp"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:background="@drawable/stroke_light_yellow"
+        app:layout_constraintStart_toEndOf="@+id/energy_recharge"
+        app:layout_constraintTop_toBottomOf="@+id/m_incoming_healing_bonus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
