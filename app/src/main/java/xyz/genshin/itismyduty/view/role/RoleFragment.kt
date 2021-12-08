@@ -15,6 +15,7 @@ import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.MysqlConnect
 import xyz.genshin.itismyduty.model.RoleBean
 import xyz.genshin.itismyduty.model.RoleGridViewAdapter
+import xyz.genshin.itismyduty.utils.ConnectServer
 import kotlin.concurrent.thread
 
 // TODO: Rename parameter arguments, choose names that match

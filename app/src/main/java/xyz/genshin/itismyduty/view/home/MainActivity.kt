@@ -7,9 +7,9 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.GridView
 import xyz.genshin.itismyduty.R
-import xyz.genshin.itismyduty.model.MysqlConnect
 import xyz.genshin.itismyduty.model.OverviewBean
 import xyz.genshin.itismyduty.model.OverviewGridViewAdapter
+import xyz.genshin.itismyduty.utils.ConnectServer
 import xyz.genshin.itismyduty.view.enemy.EnemyActivity
 import xyz.genshin.itismyduty.view.role.RoleActivity
 import kotlin.concurrent.thread
@@ -39,22 +39,13 @@ class MainActivity : AppCompatActivity() {
         val adapter = OverviewGridViewAdapter(this, list)
         overview.adapter = adapter
 
-        thread {
-            var mysqlConnect = MysqlConnect.getMysqlConnect()
-            var stmt = mysqlConnect?.createStatement()
-            var rs = stmt?.executeQuery("select stylename from overview")
-            if (rs != null) {
-                while (rs.next()){
-
-                    println(rs.getString("stylename"))
-
-                }
-            }
-        }
-
         overview.setOnItemClickListener { parent, view, position, id ->
 
             if (position == 0){
+
+                thread {
+                    ConnectServer.getOverviewImageUri()
+                }
 
                 intent = Intent(this, RoleActivity::class.java)
                 startActivity(intent)
