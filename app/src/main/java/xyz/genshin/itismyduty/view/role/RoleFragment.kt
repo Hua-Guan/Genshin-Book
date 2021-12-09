@@ -11,6 +11,7 @@ import android.widget.GridView
 import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.MysqlConnect
 import xyz.genshin.itismyduty.model.RoleBean
@@ -72,25 +73,28 @@ class RoleFragment : Fragment() {
             list = ArrayList()
             thread {
 
-                val conn = MysqlConnect.getMysqlConnect()
-                val stmt = conn?.createStatement()
-                val sql = "select RoleName, RoleUrl from role"
-                val rs = stmt?.executeQuery(sql)
-                if (rs != null) {
-                    while (rs.next()) {
-                        var role = RoleBean()
-                        role.roleName = rs.getString("RoleName")
-                        role.roleUri = "https://genshin.itismyduty.xyz/" + rs.getString("RoleUrl")
-                        (list as ArrayList<RoleBean>).add(role)
-                    }
-                    adapter = context?.let { RoleGridViewAdapter(it, list as ArrayList<RoleBean>) }
-                    handler.post {
+                var jsonArray = ConnectServer.getAllRoleImageUri()
+                for (item in jsonArray){
 
-                        gridView.adapter = adapter
+                    val roleJson = Gson().fromJson(item, RoleBean::class.java)
 
-                    }
+                    val role = RoleBean()
+                    role.roleName = roleJson.roleName
+                    println(role.roleUri)
+                    role.roleUri = "https://genshin.itismyduty.xyz/" + roleJson.roleUri
+                    (list as ArrayList<RoleBean>).add(role)
+
+                }
+
+
+                adapter = context?.let { RoleGridViewAdapter(it, list as ArrayList<RoleBean>) }
+                handler.post {
+
+                    gridView.adapter = adapter
+
                 }
             }
+        }
 
             gridView.setOnItemClickListener { parent, view, position, id ->
 
@@ -98,7 +102,7 @@ class RoleFragment : Fragment() {
                 findNavController().navigate(R.id.action_roleFragment_to_roleDetailsFragment, bundle)
 
             }
-        }
+
 
     }
 

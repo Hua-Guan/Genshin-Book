@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.GridView
+import com.google.gson.Gson
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.OverviewBean
 import xyz.genshin.itismyduty.model.OverviewGridViewAdapter
@@ -24,28 +25,38 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val overview = findViewById<GridView>(R.id.gv_overview)
 
-        val overviewRoleBean = OverviewBean()
-        overviewRoleBean.imageUri = "https://genshin.itismyduty.xyz/Role/role.jpg"
-        overviewRoleBean.typeName = "角色"
+        thread {
+            ConnectServer.getAllRoleImageUri()
 
-        val overviewEnemyBean = OverviewBean()
-        overviewEnemyBean.imageUri = "https://genshin.itismyduty.xyz/Enemy/enemy.jpg"
-        overviewEnemyBean.typeName = "敌人"
+            val jsonArray = ConnectServer.getOverviewImageUri()
+            val overviewRoleBean = OverviewBean()
+            var overviewBean = Gson().fromJson(jsonArray[1], OverviewBean::class.java)
+            println(overviewBean)
+            overviewRoleBean.imageUri = "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
+            overviewRoleBean.typeName = "角色"
 
-        val list = ArrayList<OverviewBean>()
-        list.add(overviewRoleBean)
-        list.add(overviewEnemyBean)
+            val overviewEnemyBean = OverviewBean()
+            overviewBean = Gson().fromJson(jsonArray[0], OverviewBean::class.java)
+            overviewEnemyBean.imageUri = "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
+            overviewEnemyBean.typeName = "敌人"
 
-        val adapter = OverviewGridViewAdapter(this, list)
-        overview.adapter = adapter
+            val list = ArrayList<OverviewBean>()
+            list.add(overviewRoleBean)
+            list.add(overviewEnemyBean)
+
+            handle.post(Runnable {
+
+                val adapter = OverviewGridViewAdapter(this, list)
+                overview.adapter = adapter
+
+            })
+
+
+        }
 
         overview.setOnItemClickListener { parent, view, position, id ->
 
             if (position == 0){
-
-                thread {
-                    ConnectServer.getOverviewImageUri()
-                }
 
                 intent = Intent(this, RoleActivity::class.java)
                 startActivity(intent)
