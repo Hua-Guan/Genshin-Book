@@ -2,6 +2,7 @@ package xyz.genshin.itismyduty.view.role
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.widget.ImageView
 import xyz.genshin.itismyduty.R
 
@@ -13,4 +14,5 @@ class RoleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_role)
     }
+
 }

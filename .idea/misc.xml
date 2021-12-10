@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/drawable/fillet.xml" value="0.28717948717948716" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2740740740740741" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/drawable/stroke_light_yellow.xml" value="0.27314814814814814" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/drawable/stroke_yellow.xml" value="0.25555555555555554" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_enemy.xml" value="0.2558876811594203" />
@@ -15,6 +16,8 @@
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role_information.xml" value="0.3828571428571429" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_overview.xml" value="0.6285714285714287" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_role.xml" value="0.5142857142857143" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2740740740740741" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2740740740740741" />
       </map>
     </option>
   </component>

@@ -73,7 +73,7 @@ class RoleFragment : Fragment() {
             list = ArrayList()
             thread {
 
-                var jsonArray = ConnectServer.getAllRoleImageUri()
+                val jsonArray = ConnectServer.getAllRoleImageUri()
                 for (item in jsonArray){
 
                     val roleJson = Gson().fromJson(item, RoleBean::class.java)

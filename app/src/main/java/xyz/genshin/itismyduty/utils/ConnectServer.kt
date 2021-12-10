@@ -94,14 +94,7 @@ object ConnectServer {
                 break
             }
         } while (true)
-        // 使用new方法
-        val gson = Gson()
-        val turnsType = object : TypeToken<List<String>>() {}.type
         val jsonStr = String(sbf)
-
-        //Json的解析类对象
-        //将JSON的String 转成一个JsonArray对象
-        //将JSON的String 转成一个JsonArray对象
 
         return JsonParser.parseString(jsonStr).asJsonArray
     }

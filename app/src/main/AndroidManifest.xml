@@ -14,13 +14,16 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.role.RoleActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".view.enemy.EnemyActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".view.home.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

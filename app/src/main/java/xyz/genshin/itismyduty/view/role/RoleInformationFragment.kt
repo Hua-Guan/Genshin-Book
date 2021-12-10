@@ -55,7 +55,7 @@ class RoleInformationFragment(private val roleName: String): Fragment() {
             val conn = MysqlConnect.getMysqlConnect()
             val stmt = conn?.createStatement()
             val mStmt = conn?.createStatement()
-            val sql = "select RoleUrl from role where RoleName = '$roleName'"
+            val sql = "select RoleUri from role where RoleName = '$roleName'"
             val mSql = "select Affiliation, Vision, WeaponType, Constellation, " +
                     "Birthday, Title, Introduction from roleinformation where " +
                     "RoleName = '$roleName'"
@@ -67,7 +67,7 @@ class RoleInformationFragment(private val roleName: String): Fragment() {
                 //加载图片
                 if (rs != null) {
                     Glide.with(view)
-                        .load("https://genshin.itismyduty.xyz/" + rs.getString("RoleUrl"))
+                        .load("https://genshin.itismyduty.xyz/" + rs.getString("RoleUri"))
                         .into(roleImage)
                     roleImage.clipToOutline = true
                 }
