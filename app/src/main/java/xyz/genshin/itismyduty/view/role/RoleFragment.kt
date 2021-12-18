@@ -11,24 +11,19 @@ import android.widget.GridView
 import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
+import com.google.gson.JsonParser
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.MysqlConnect
 import xyz.genshin.itismyduty.model.RoleBean
 import xyz.genshin.itismyduty.model.RoleGridViewAdapter
 import xyz.genshin.itismyduty.utils.ConnectServer
+import xyz.genshin.itismyduty.utils.VolleyInstance
 import kotlin.concurrent.thread
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [RoleFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class RoleFragment : Fragment() {
 
     private var param1: String? = null
@@ -38,14 +33,6 @@ class RoleFragment : Fragment() {
     private var handler = Handler(Looper.myLooper()!!)
     private var adapter: RoleGridViewAdapter? = null
     private lateinit var gridView: GridView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,38 +58,29 @@ class RoleFragment : Fragment() {
         if (adapter == null) {
             gridView = view.findViewById(R.id.role)
             list = ArrayList()
-            thread {
-
-                val jsonArray = ConnectServer.getAllRoleImageUri()
-                for (item in jsonArray){
-
-                    val roleJson = Gson().fromJson(item, RoleBean::class.java)
-
-                    val role = RoleBean()
-                    role.roleName = roleJson.roleName
-                    println(role.roleUri)
-                    role.roleUri = "https://genshin.itismyduty.xyz/" + roleJson.roleUri
-                    (list as ArrayList<RoleBean>).add(role)
-
-                }
-
-
-                adapter = context?.let { RoleGridViewAdapter(it, list as ArrayList<RoleBean>) }
-                handler.post {
-
+            val stringRequest = StringRequest(
+                Request.Method.POST, "http://genshin.itismyduty.xyz:8080/GenshinBook?request=getAllRoleImageUri",
+                { response ->
+                    val jsonArray = JsonParser.parseString(response).asJsonArray
+                    for (item in jsonArray){
+                        val roleJson = Gson().fromJson(item, RoleBean::class.java)
+                        val role = RoleBean()
+                        role.roleName = roleJson.roleName
+                        role.roleUri = "https://genshin.itismyduty.xyz/" + roleJson.roleUri
+                        (list as ArrayList<RoleBean>).add(role)
+                    }
+                    adapter = context?.let { RoleGridViewAdapter(it, list as ArrayList<RoleBean>) }
                     gridView.adapter = adapter
-
-                }
-            }
+                }, { })
+            activity?.let { VolleyInstance.getInstance(it.applicationContext).addToRequestQueue(stringRequest) }
         }
 
-            gridView.setOnItemClickListener { parent, view, position, id ->
+        gridView.setOnItemClickListener { parent, view, position, id ->
 
-                val bundle = bundleOf("roleName" to (list as ArrayList<RoleBean>)[position].roleName)
+            val bundle = bundleOf("roleName" to (list as ArrayList<RoleBean>)[position].roleName)
                 findNavController().navigate(R.id.action_roleFragment_to_roleDetailsFragment, bundle)
 
-            }
-
+        }
 
     }
 
@@ -117,23 +95,4 @@ class RoleFragment : Fragment() {
 
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RoleFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RoleFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

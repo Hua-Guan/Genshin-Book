@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.GridView
+import android.widget.TableLayout
+import androidx.viewpager2.widget.ViewPager2
+import com.android.volley.Request
 import com.google.gson.Gson
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.OverviewBean
@@ -14,62 +17,48 @@ import xyz.genshin.itismyduty.utils.ConnectServer
 import xyz.genshin.itismyduty.view.enemy.EnemyActivity
 import xyz.genshin.itismyduty.view.role.RoleActivity
 import kotlin.concurrent.thread
+import com.android.volley.VolleyError
+
+import com.android.volley.Response
+
+import org.json.JSONObject
+
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.JsonParser
+import xyz.genshin.itismyduty.model.MainTabPagerViewAdapter
+import xyz.genshin.itismyduty.utils.VolleyInstance
+
 
 /**
  * @author GuanHua
  */
 class MainActivity : AppCompatActivity() {
-    private val handle = Handler(Looper.myLooper()!!)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val overview = findViewById<GridView>(R.id.gv_overview)
 
-        thread {
-            ConnectServer.getAllRoleImageUri()
+        val tab = findViewById<TabLayout>(R.id.tab)
+        val pager = findViewById<ViewPager2>(R.id.pager)
+        val adapter = MainTabPagerViewAdapter(this)
+        pager.adapter = adapter
 
-            val jsonArray = ConnectServer.getOverviewImageUri()
-            val overviewRoleBean = OverviewBean()
-            var overviewBean = Gson().fromJson(jsonArray[1], OverviewBean::class.java)
-            println(overviewBean)
-            overviewRoleBean.imageUri = "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
-            overviewRoleBean.typeName = "角色"
-
-            val overviewEnemyBean = OverviewBean()
-            overviewBean = Gson().fromJson(jsonArray[0], OverviewBean::class.java)
-            overviewEnemyBean.imageUri = "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
-            overviewEnemyBean.typeName = "敌人"
-
-            val list = ArrayList<OverviewBean>()
-            list.add(overviewRoleBean)
-            list.add(overviewEnemyBean)
-
-            handle.post(Runnable {
-
-                val adapter = OverviewGridViewAdapter(this, list)
-                overview.adapter = adapter
-
-            })
-
-
-        }
-
-        overview.setOnItemClickListener { parent, view, position, id ->
+        TabLayoutMediator(tab, pager){tab, position ->
 
             if (position == 0){
-
-                intent = Intent(this, RoleActivity::class.java)
-                startActivity(intent)
-
+                tab.text = "主页"
             }else if (position == 1){
-
-                intent = Intent(this, EnemyActivity::class.java)
-                startActivity(intent)
-
+                tab.text = "历史"
+            }else if (position == 2){
+                tab.text = "我"
             }
 
-        }
-
+        }.attach()
 
     }
+
+
 }

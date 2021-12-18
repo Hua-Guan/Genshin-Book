@@ -3,6 +3,7 @@ package xyz.genshin.itismyduty.model
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import xyz.genshin.itismyduty.view.role.RoleAttributesFragment
+import xyz.genshin.itismyduty.view.role.RoleConstellationFragment
 import xyz.genshin.itismyduty.view.role.RoleInformationFragment
 
 /**
@@ -11,7 +12,7 @@ import xyz.genshin.itismyduty.view.role.RoleInformationFragment
 class RolePagerViewAdapter(fragment: Fragment, private val roleName: String): FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
 
-        return 2
+        return 3
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -23,6 +24,10 @@ class RolePagerViewAdapter(fragment: Fragment, private val roleName: String): Fr
         }else if (position == 1){
 
             return RoleAttributesFragment(roleName)
+
+        }else if (position == 2){
+
+            return RoleConstellationFragment()
 
         }
 

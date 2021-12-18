@@ -10,8 +10,12 @@
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_enemy.xml" value="0.2558876811594203" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_main.xml" value="0.2857142857142857" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_role.xml" value="0.2558876811594203" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_history.xml" value="0.22871376811594202" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_home.xml" value="0.25815217391304346" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_me.xml" value="0.22871376811594202" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role_attributes.xml" value="0.3828571428571429" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role_constellation.xml" value="0.2857142857142857" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role_details.xml" value="0.23052536231884058" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role_information.xml" value="0.3828571428571429" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_overview.xml" value="0.6285714285714287" />

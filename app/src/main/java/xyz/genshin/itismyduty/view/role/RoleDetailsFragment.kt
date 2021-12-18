@@ -77,7 +77,7 @@ class RoleDetailsFragment : Fragment() {
     }
 
     private fun setPagerView(view: View){
-        var tab: TabLayout = view.findViewById(R.id.tab_role)
+        val tab: TabLayout = view.findViewById(R.id.tab_role)
         val pager = view.findViewById<ViewPager2>(R.id.pager)
         val adapter = arguments?.getString("roleName")?.let { RolePagerViewAdapter(this, it) }
 
@@ -89,6 +89,8 @@ class RoleDetailsFragment : Fragment() {
                 tab.text = "角色信息"
             }else if (position == 1){
                 tab.text = "基础属性"
+            }else if (position == 2){
+                tab.text = "命之座"
             }
 
         }.attach()

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/constellation_name"
+        android:layout_width="112dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="名称"
+        android:gravity="center"
+        android:background="@drawable/stroke_yellow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/material"
+            android:layout_width="112dp"
+            android:layout_height="24dp"
+            android:background="@drawable/stroke_yellow"
+            android:gravity="center"
+            android:text="激活材料"
+            app:layout_constraintStart_toEndOf="@+id/constellation_name"
+            app:layout_constraintTop_toTopOf="@+id/constellation_name" />
+
+        <TextView
+            android:id="@+id/introduction"
+            android:layout_width="112dp"
+            android:layout_height="24dp"
+            android:background="@drawable/stroke_yellow"
+            android:gravity="center"
+            android:text="介绍"
+            app:layout_constraintStart_toEndOf="@+id/material"
+            app:layout_constraintTop_toTopOf="@+id/material" />
+
+        <TextView
+            android:id="@+id/introduction_0"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintEnd_toEndOf="@+id/introduction"
+            app:layout_constraintTop_toBottomOf="@+id/introduction" />
+
+        <TextView
+            android:id="@+id/material_0"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/introduction_0"
+            app:layout_constraintEnd_toStartOf="@+id/introduction_0"
+            app:layout_constraintTop_toBottomOf="@+id/introduction" />
+
+        <TextView
+            android:id="@+id/constellation_name_0"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/material_0"
+            app:layout_constraintEnd_toStartOf="@+id/material_0"
+            app:layout_constraintTop_toBottomOf="@+id/material" />
+
+        <TextView
+            android:id="@+id/introduction_1"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintEnd_toEndOf="@+id/introduction_0"
+            app:layout_constraintTop_toBottomOf="@+id/introduction_0" />
+
+        <TextView
+            android:id="@+id/material_1"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/introduction_1"
+            app:layout_constraintEnd_toStartOf="@+id/introduction_1"
+            app:layout_constraintTop_toBottomOf="@+id/introduction_0" />
+
+        <TextView
+            android:id="@+id/constellation_name_1"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/material_1"
+            app:layout_constraintEnd_toStartOf="@+id/material_1"
+            app:layout_constraintTop_toBottomOf="@+id/material_0" />
+
+        <TextView
+            android:id="@+id/introduction_2"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintEnd_toEndOf="@+id/introduction_1"
+            app:layout_constraintTop_toBottomOf="@+id/introduction_1" />
+
+        <TextView
+            android:id="@+id/material_2"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/introduction_2"
+            app:layout_constraintEnd_toStartOf="@+id/introduction_2"
+            app:layout_constraintTop_toBottomOf="@+id/material_1" />
+
+        <TextView
+            android:id="@+id/constellation_name_2"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/material_2"
+            app:layout_constraintEnd_toStartOf="@+id/material_2"
+            app:layout_constraintTop_toBottomOf="@+id/material_1" />
+
+        <TextView
+            android:id="@+id/introduction_3"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintEnd_toEndOf="@+id/introduction_2"
+            app:layout_constraintTop_toBottomOf="@+id/introduction_2" />
+
+        <TextView
+            android:id="@+id/material_3"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/introduction_3"
+            app:layout_constraintEnd_toStartOf="@+id/introduction_3"
+            app:layout_constraintTop_toBottomOf="@+id/material_2" />
+
+        <TextView
+            android:id="@+id/constellation_name_3"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/material_3"
+            app:layout_constraintEnd_toStartOf="@+id/material_3"
+            app:layout_constraintTop_toBottomOf="@+id/constellation_name_2" />
+
+        <TextView
+            android:id="@+id/introduction_4"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintEnd_toEndOf="@+id/introduction_3"
+            app:layout_constraintTop_toBottomOf="@+id/introduction_3" />
+
+        <TextView
+            android:id="@+id/material_4"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/introduction_4"
+            app:layout_constraintEnd_toStartOf="@+id/introduction_4"
+            app:layout_constraintTop_toBottomOf="@+id/introduction_3" />
+
+        <TextView
+            android:id="@+id/constellation_name_4"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/material_4"
+            app:layout_constraintEnd_toStartOf="@+id/material_4"
+            app:layout_constraintTop_toBottomOf="@+id/material_3" />
+
+        <TextView
+            android:id="@+id/introduction_5"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintEnd_toEndOf="@+id/introduction_4"
+            app:layout_constraintTop_toBottomOf="@+id/introduction_4" />
+
+        <TextView
+            android:id="@+id/material_5"
+            android:layout_width="112dp"
+            android:layout_height="0dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/introduction_5"
+            app:layout_constraintTop_toBottomOf="@+id/introduction_4" />
+
+        <TextView
+            android:id="@+id/constellation_name_5"
+            android:layout_width="112dp"
+            android:layout_height="100dp"
+            android:background="@drawable/stroke_light_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/material_5"
+            app:layout_constraintEnd_toStartOf="@+id/material_5"
+            app:layout_constraintTop_toBottomOf="@+id/material_4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

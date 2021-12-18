@@ -9,9 +9,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.MysqlConnect
+import xyz.genshin.itismyduty.model.RoleInformationBean
+import xyz.genshin.itismyduty.utils.ConnectServer
+import xyz.genshin.itismyduty.utils.VolleyInstance
 import kotlin.concurrent.thread
 
 /**
@@ -51,39 +59,31 @@ class RoleInformationFragment(private val roleName: String): Fragment() {
         val mTitle = view.findViewById<TextView>(R.id.m_title)
         val mIntroduction = view.findViewById<TextView>(R.id.m_introduction)
 
-        thread {
-            val conn = MysqlConnect.getMysqlConnect()
-            val stmt = conn?.createStatement()
-            val mStmt = conn?.createStatement()
-            val sql = "select RoleUri from role where RoleName = '$roleName'"
-            val mSql = "select Affiliation, Vision, WeaponType, Constellation, " +
-                    "Birthday, Title, Introduction from roleinformation where " +
-                    "RoleName = '$roleName'"
-            val rs = stmt?.executeQuery(sql)
-            val mRs = mStmt?.executeQuery(mSql)
-            rs?.next()
-            mRs?.next()
-            handler.post(Runnable {
-                //加载图片
-                if (rs != null) {
-                    Glide.with(view)
-                        .load("https://genshin.itismyduty.xyz/" + rs.getString("RoleUri"))
-                        .into(roleImage)
-                    roleImage.clipToOutline = true
-                }
-                //加载其他数据
-                if (mRs != null) {
-                    mAffiliation.text = mRs.getString("Affiliation")
-                    mVision.text = mRs.getString("Vision")
-                    mWeaponType.text = mRs.getString("WeaponType")
-                    mConstellation.text = mRs.getString("Constellation")
-                    mBirthday.text = mRs.getString("Birthday")
-                    mTitle.text = mRs.getString("Title")
-                    mIntroduction.text = mRs.getString("Introduction")
-                }
+        val stringRequest = StringRequest(
+            Request.Method.POST, "http://genshin.itismyduty.xyz:8080/GenshinBook?" +
+                    "request=getRoleInformationAndImageUri&roleName=$roleName",
+            { response ->
+                println(response)
+                val roleInformation = Gson().fromJson(response, RoleInformationBean::class.java)
 
-            })
-        }
+                //加载图片
+                Glide.with(view)
+                    .load("https://genshin.itismyduty.xyz/" + roleInformation.roleUri)
+                    .into(roleImage)
+                roleImage.clipToOutline = true
+
+                //加载其他数据
+                mAffiliation.text = roleInformation.affiliation
+                mVision.text = roleInformation.vision
+                mWeaponType.text = roleInformation.weaponType
+                mConstellation.text = roleInformation.constellation
+                mBirthday.text = roleInformation.birthday
+                mTitle.text = roleInformation.title
+                mIntroduction.text = roleInformation.introduction
+
+            }, { })
+
+        context?.let { VolleyInstance.getInstance(it.applicationContext).addToRequestQueue(stringRequest) }
 
     }
 

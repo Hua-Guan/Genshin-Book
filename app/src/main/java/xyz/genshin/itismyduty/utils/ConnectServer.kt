@@ -10,7 +10,7 @@ import com.google.gson.JsonArray
 
 import com.google.gson.JsonParser
 
-
+@Deprecated("已有更好的方案，不在使用此类")
 object ConnectServer {
 
     fun getOverviewImageUri(): JsonArray {
@@ -97,6 +97,48 @@ object ConnectServer {
         val jsonStr = String(sbf)
 
         return JsonParser.parseString(jsonStr).asJsonArray
+    }
+
+    fun getRoleInformationAndImageUri(roleName: String): String {
+
+        //请求行
+        val urlStr = "http://genshin.itismyduty.xyz:8080/GenshinBook/"
+        val url = URL(urlStr)
+        val urlConnection = url.openConnection()
+        val httpURLConnection = urlConnection as HttpURLConnection
+
+        //请求头
+        httpURLConnection.doInput = true
+        httpURLConnection.doOutput = true
+        httpURLConnection.useCaches = false
+        httpURLConnection.requestMethod = "POST"
+        httpURLConnection.setRequestProperty("Charset", "UTF-8")
+        httpURLConnection.setRequestProperty(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        )
+
+        //请求体
+        val os = httpURLConnection.outputStream
+        val param = "request=getRoleInformationAndImageUri&roleName=$roleName"
+        os.write(param.toByteArray())
+
+        //返回
+        val iis = httpURLConnection.inputStream
+        val bf = BufferedReader(InputStreamReader(iis))
+        val sbf = StringBuffer()
+        var str: String?
+        do {
+            str = bf.readLine()
+            if (str != null) {
+                sbf.append(str)
+            } else {
+                break
+            }
+        } while (true)
+        val jsonStr = String(sbf)
+
+        return jsonStr
     }
 
 

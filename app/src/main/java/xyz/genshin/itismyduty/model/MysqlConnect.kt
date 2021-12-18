@@ -6,6 +6,7 @@ import java.sql.DriverManager
 /**
  * @author GuanHua
  */
+@Deprecated("已有更好的解决方案")
 object MysqlConnect {
 
     //单例模式
