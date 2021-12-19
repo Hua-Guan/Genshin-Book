@@ -18,6 +18,9 @@ import xyz.genshin.itismyduty.utils.VolleyInstance
 import xyz.genshin.itismyduty.view.enemy.EnemyActivity
 import xyz.genshin.itismyduty.view.role.RoleActivity
 
+/**
+ * @author GuanHua
+ */
 class HomeFragment: Fragment() {
 
     private var mView: View? = null

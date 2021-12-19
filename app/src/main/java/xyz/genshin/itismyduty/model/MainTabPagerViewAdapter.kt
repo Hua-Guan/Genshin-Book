@@ -8,6 +8,9 @@ import xyz.genshin.itismyduty.view.history.HistoryFragment
 import xyz.genshin.itismyduty.view.home.HomeFragment
 import xyz.genshin.itismyduty.view.me.MeFragment
 
+/**
+ * @author GuanHua
+ */
 class MainTabPagerViewAdapter(activity: FragmentActivity): FragmentStateAdapter(activity) {
     override fun getItemCount(): Int {
         return 3

@@ -12,6 +12,9 @@ import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.MysqlConnect
 import kotlin.concurrent.thread
 
+/**
+ * @author GuanHua
+ */
 class RoleAttributesFragment(private val roleName: String): Fragment() {
 
     private var mView: View? = null

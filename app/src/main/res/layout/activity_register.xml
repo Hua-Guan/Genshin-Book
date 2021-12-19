@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.me.RegisterActivity">
+
+    <TextView
+        android:id="@+id/mail"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="160dp"
+        android:gravity="center"
+        android:text="邮箱"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_mail"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:hint="请输入邮箱"
+        app:layout_constraintStart_toEndOf="@+id/mail"
+        app:layout_constraintTop_toTopOf="@+id/mail" />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="密码"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/mail"
+        app:layout_constraintTop_toBottomOf="@+id/mail" />
+
+    <EditText
+        android:id="@+id/edit_password"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:hint="请输入密码"
+        app:layout_constraintStart_toEndOf="@+id/password"
+        app:layout_constraintTop_toTopOf="@+id/password" />
+
+    <TextView
+        android:id="@+id/confirm_password"
+        android:layout_width="96dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:text="确认密码"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <EditText
+        android:id="@+id/edit_confirm_password"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:hint="请再次输入密码"
+        app:layout_constraintStart_toEndOf="@+id/confirm_password"
+        app:layout_constraintTop_toTopOf="@+id/confirm_password" />
+
+    <TextView
+        android:id="@+id/verification_code"
+        android:layout_width="96dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="验证码"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/confirm_password"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_password" />
+
+    <EditText
+        android:id="@+id/edit_verification_code"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:hint="请输入邮箱验证码"
+        app:layout_constraintStart_toEndOf="@+id/verification_code"
+        app:layout_constraintTop_toTopOf="@+id/verification_code" />
+
+    <Button
+        android:id="@+id/send_verification_code"
+        android:layout_width="96dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:text="发送验证码"
+        app:layout_constraintEnd_toEndOf="@+id/edit_verification_code"
+        app:layout_constraintTop_toTopOf="@+id/register" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="80dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="注册"
+        app:layout_constraintStart_toStartOf="@+id/verification_code"
+        app:layout_constraintTop_toBottomOf="@+id/edit_verification_code" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

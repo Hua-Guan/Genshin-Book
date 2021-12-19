@@ -8,6 +8,9 @@ import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.Volley
 
+/**
+ * @author GuanHua
+ */
 class VolleyInstance constructor(context: Context) {
 
     companion object{

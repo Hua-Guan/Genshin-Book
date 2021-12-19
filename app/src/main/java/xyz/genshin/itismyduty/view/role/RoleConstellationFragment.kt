@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import xyz.genshin.itismyduty.R
 
+/**
+ * @author GuanHua
+ */
 class RoleConstellationFragment: Fragment() {
 
     private var mView: View? =null

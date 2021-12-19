@@ -10,6 +10,9 @@ import com.google.gson.JsonArray
 
 import com.google.gson.JsonParser
 
+/**
+ * @author GuanHua
+ */
 @Deprecated("已有更好的方案，不在使用此类")
 object ConnectServer {
 

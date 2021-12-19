@@ -24,6 +24,9 @@ import xyz.genshin.itismyduty.utils.ConnectServer
 import xyz.genshin.itismyduty.utils.VolleyInstance
 import kotlin.concurrent.thread
 
+/**
+ * @author GuanHua
+ */
 class RoleFragment : Fragment() {
 
     private var param1: String? = null

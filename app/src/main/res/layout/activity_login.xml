@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="xyz.genshin.itismyduty.view.me.LoginActivity">
+
+    <TextView
+        android:id="@+id/account"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="240dp"
+        android:gravity="center"
+        android:text="账号"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_account"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:hint="请输入邮箱"
+        app:layout_constraintStart_toEndOf="@+id/account"
+        app:layout_constraintTop_toTopOf="@+id/account" />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="密码"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/account"
+        app:layout_constraintTop_toBottomOf="@+id/account" />
+
+    <EditText
+        android:id="@+id/edit_password"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:hint="请输入密码"
+        app:layout_constraintStart_toEndOf="@+id/password"
+        app:layout_constraintTop_toTopOf="@+id/password" />
+
+    <TextView
+        android:id="@+id/quick_register"
+        android:layout_width="80dp"
+        android:layout_height="32dp"
+        android:text="快速注册"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <TextView
+        android:id="@+id/forget_password"
+        android:layout_width="80dp"
+        android:layout_height="32dp"
+        android:text="忘记密码"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/edit_password"
+        app:layout_constraintTop_toBottomOf="@+id/edit_password" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
