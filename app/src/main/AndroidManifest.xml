@@ -26,6 +26,9 @@
         <activity android:name=".view.me.RegisterActivity"
             android:exported="false"
             android:launchMode="singleTop"/>
+        <activity android:name=".view.me.ForgetPasswordActivity"
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".view.home.MainActivity"
             android:exported="true"

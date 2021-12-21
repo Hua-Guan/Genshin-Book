@@ -15,6 +15,7 @@ class LoginActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         setQuickRegister()
+        setForgetPassword()
     }
 
     private fun setQuickRegister(){
@@ -27,6 +28,18 @@ class LoginActivity: AppCompatActivity() {
 
         }
 
+
+    }
+
+    private fun setForgetPassword(){
+
+        val forgetPassword = findViewById<TextView>(R.id.forget_password)
+        forgetPassword.setOnClickListener {
+
+            val intent = Intent(this, ForgetPasswordActivity::class.java)
+            startActivity(intent)
+
+        }
 
     }
 
