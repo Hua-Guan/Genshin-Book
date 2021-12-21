@@ -6,6 +6,7 @@ import java.sql.DriverManager
 /**
  * @author GuanHua
  */
+@Deprecated("已有更好的解决方案")
 object MysqlConnect {
 
     //单例模式
@@ -15,7 +16,7 @@ object MysqlConnect {
         if (conn == null) {
             val url =
                 "jdbc:mysql://45.77.1.79:3306/genshinbook?characterEncoding=utf8&verifyServerCertificate=false&useSSL=false"
-            val user = "root"
+            val user = "genshin-user"
             val password = "123456"
             Class.forName("com.mysql.jdbc.Driver").newInstance()
             conn = DriverManager.getConnection(url, user, password)

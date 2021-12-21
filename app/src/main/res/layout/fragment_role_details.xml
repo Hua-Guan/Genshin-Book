@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="view.role.RoleDetailsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFFFFFFF"
+        android:elevation="4dp" >
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_marginLeft="24dp"
+            android:src="@drawable/back"
+            android:scaleType="fitCenter"
+            android:layout_width="24dp"
+            android:layout_height="40dp"/>
+
+        <TextView
+            android:id="@+id/role_name"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_role"
+        android:layout_width="match_parent"
+        app:tabMode="scrollable"
+        android:layout_height="56dp"
+        android:layout_marginTop="60dp"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="120dp"/>
+
+</FrameLayout>

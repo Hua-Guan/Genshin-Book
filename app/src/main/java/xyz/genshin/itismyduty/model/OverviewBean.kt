@@ -5,7 +5,7 @@ package xyz.genshin.itismyduty.model
  */
 class OverviewBean {
 
-    lateinit var imageUri: String
-    lateinit var typeName: String
+     var imageUri: String = ""
+     var typeName: String = ""
 
 }

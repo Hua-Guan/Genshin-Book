@@ -14,20 +14,23 @@ import xyz.genshin.itismyduty.R
 /**
  * @author GuanHua
  */
-class OverviewGridViewAdapter(context: Context, list: List<OverviewBean>) : BaseAdapter() {
-    private var context: Context = context
-    private var list: List<OverviewBean> = list
+class OverviewGridViewAdapter constructor(
+    private var context: Context,
+    private var list: List<OverviewBean>
+    ) : BaseAdapter() {
+    //private var context: Context = context
+    //private var list: List<OverviewBean> = list
 
     override fun getCount(): Int {
         return list.size
     }
 
     override fun getItem(position: Int): Any {
-        return list.get(position)
+        return list[position]
     }
 
     override fun getItemId(position: Int): Long {
-        return list.get(position).hashCode().toLong()
+        return list[position].hashCode().toLong()
     }
 
     @SuppressLint("InflateParams", "SetTextI18n")
@@ -40,7 +43,7 @@ class OverviewGridViewAdapter(context: Context, list: List<OverviewBean>) : Base
             holder.image = view.findViewById(R.id.image)
             holder.typeName =  view.findViewById(R.id.type_name)
             Glide.with(view)
-                .load(list.get(position).imageUri)
+                .load(list[position].imageUri)
                 .into(holder.image)
             holder.typeName.text = list.get(position).typeName
             view?.tag = holder
