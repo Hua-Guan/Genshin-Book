@@ -16,12 +16,19 @@ import xyz.genshin.itismyduty.model.OverviewBean
 import xyz.genshin.itismyduty.model.OverviewGridViewAdapter
 import xyz.genshin.itismyduty.utils.VolleyInstance
 import xyz.genshin.itismyduty.view.enemy.EnemyActivity
+import xyz.genshin.itismyduty.view.ost.OstActivity
 import xyz.genshin.itismyduty.view.role.RoleActivity
 
 /**
  * @author GuanHua
  */
 class HomeFragment: Fragment() {
+
+    companion object{
+        const val ROLE_ACTIVITY = 0
+        const val ENEMY_ACTIVITY = 1
+        const val OST_ACTIVITY = 2
+    }
 
     private var mView: View? = null
     private var overview: GridView? = null
@@ -47,14 +54,19 @@ class HomeFragment: Fragment() {
 
             overview?.setOnItemClickListener { parent, view, position, id ->
 
-                if (position == 0){
+                if (position == ROLE_ACTIVITY){
 
                     val intent = Intent(activity, RoleActivity::class.java)
                     startActivity(intent)
 
-                }else if (position == 1){
+                }else if (position == ENEMY_ACTIVITY){
 
                     val intent = Intent(activity, EnemyActivity::class.java)
+                    startActivity(intent)
+
+                }else if (position == OST_ACTIVITY){
+
+                    val intent = Intent(activity, OstActivity::class.java)
                     startActivity(intent)
 
                 }
@@ -84,9 +96,14 @@ class HomeFragment: Fragment() {
                     "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
                 overviewEnemyBean.typeName = "敌人"
 
+                val overviewOstBean = OverviewBean()
+                overviewOstBean.imageUri = "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
+                overviewOstBean.typeName = "OST"
+
                 val list = ArrayList<OverviewBean>()
                 list.add(overviewRoleBean)
                 list.add(overviewEnemyBean)
+                list.add(overviewOstBean)
 
                 val adapter = context?.let { OverviewGridViewAdapter(it, list) }
                 overview?.adapter = adapter

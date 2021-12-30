@@ -20,6 +20,9 @@
             android:name=".view.enemy.EnemyActivity"
             android:exported="false"
             android:launchMode="singleTop"/>
+        <activity android:name=".view.ost.OstActivity"
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity android:name=".view.me.LoginActivity"
             android:exported="false"
             android:launchMode="singleTop" />

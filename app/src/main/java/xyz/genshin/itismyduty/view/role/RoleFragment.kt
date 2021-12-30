@@ -29,8 +29,6 @@ import kotlin.concurrent.thread
  */
 class RoleFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
     private var mView: View? = null
     private var list: List<RoleBean>? = null
     private var handler = Handler(Looper.myLooper()!!)

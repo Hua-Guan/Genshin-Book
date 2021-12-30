@@ -12,18 +12,26 @@ import xyz.genshin.itismyduty.view.me.MeFragment
  * @author GuanHua
  */
 class MainTabPagerViewAdapter(activity: FragmentActivity): FragmentStateAdapter(activity) {
+
+    companion object{
+        const val ALL = 3
+        const val HOME_FRAGMENT = 0
+        const val HISTORY_FRAGMENT = 1
+        const val ME_FRAGMENT = 2
+    }
+
     override fun getItemCount(): Int {
-        return 3
+        return ALL
     }
 
     override fun createFragment(position: Int): Fragment {
-        if (position == 0){
+        if (position == HOME_FRAGMENT){
 
             return HomeFragment()
 
-        }else if (position == 1){
+        }else if (position == HISTORY_FRAGMENT){
             return HistoryFragment()
-        }else if (position == 2){
+        }else if (position == ME_FRAGMENT){
             return MeFragment()
         }
         return HomeFragment()
