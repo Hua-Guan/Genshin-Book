@@ -32,6 +32,9 @@ class OstListAdapter(private var context: Context,
             holder.videoView = view.findViewById(R.id.video)
             holder.videoName = view.findViewById(R.id.video_name)
 
+            view.tag = holder
+        }else{
+            val holder = view.tag as Holder
         }
         return view
     }
