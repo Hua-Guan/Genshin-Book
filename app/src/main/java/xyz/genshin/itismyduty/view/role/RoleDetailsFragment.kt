@@ -12,7 +12,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import xyz.genshin.itismyduty.R
-import xyz.genshin.itismyduty.model.RolePagerViewAdapter
+import xyz.genshin.itismyduty.model.adapter.RolePagerViewAdapter
 
 /**
  * @author GuanHua

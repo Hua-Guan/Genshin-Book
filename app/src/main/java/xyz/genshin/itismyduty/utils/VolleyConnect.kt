@@ -3,11 +3,7 @@ package xyz.genshin.itismyduty.utils
 import android.content.Context
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonParser
-import xyz.genshin.itismyduty.model.OverviewBean
-import xyz.genshin.itismyduty.model.OverviewGridViewAdapter
 
 /**
  * @author GuanHua

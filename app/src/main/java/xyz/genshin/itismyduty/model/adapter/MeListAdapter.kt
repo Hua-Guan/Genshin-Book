@@ -1,7 +1,6 @@
-package xyz.genshin.itismyduty.model
+package xyz.genshin.itismyduty.model.adapter
 
 import android.content.Context
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import xyz.genshin.itismyduty.R
-import java.util.zip.Inflater
+import xyz.genshin.itismyduty.model.bean.MeListBean
 
 class MeListAdapter(private var context: Context,
                     private var list: List<MeListBean>): BaseAdapter() {
@@ -35,6 +34,20 @@ class MeListAdapter(private var context: Context,
             holder.itemImage = view.findViewById(R.id.item_img)
             holder.itemName = view.findViewById(R.id.item_name)
             holder.itemGo = view.findViewById(R.id.item_go)
+
+            Glide.with(view)
+                .load(list[position].itemImageUri)
+                .into(holder.itemImage)
+
+            holder.itemName.text = list[position].itemName
+
+            Glide.with(view)
+                .load(list[position].itemGo)
+                .into(holder.itemGo)
+
+            view.tag = holder
+        }else {
+            val holder = view.tag as Holder
 
             Glide.with(view)
                 .load(list[position].itemImageUri)

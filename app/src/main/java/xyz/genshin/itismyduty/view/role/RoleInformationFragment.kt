@@ -10,17 +10,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import com.google.gson.JsonParser
 import xyz.genshin.itismyduty.R
-import xyz.genshin.itismyduty.model.MysqlConnect
-import xyz.genshin.itismyduty.model.RoleInformationBean
-import xyz.genshin.itismyduty.utils.ConnectServer
+import xyz.genshin.itismyduty.model.bean.RoleInformationBean
 import xyz.genshin.itismyduty.utils.VolleyInstance
-import kotlin.concurrent.thread
 
 /**
  * @author GuanHua

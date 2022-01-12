@@ -1,4 +1,4 @@
-package xyz.genshin.itismyduty.model
+package xyz.genshin.itismyduty.model.bean
 
 class MeListBean {
 

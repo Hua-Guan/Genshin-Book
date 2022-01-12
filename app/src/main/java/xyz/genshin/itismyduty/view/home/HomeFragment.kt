@@ -12,8 +12,8 @@ import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import xyz.genshin.itismyduty.R
-import xyz.genshin.itismyduty.model.OverviewBean
-import xyz.genshin.itismyduty.model.OverviewGridViewAdapter
+import xyz.genshin.itismyduty.model.bean.OverviewBean
+import xyz.genshin.itismyduty.model.adapter.OverviewGridViewAdapter
 import xyz.genshin.itismyduty.utils.VolleyInstance
 import xyz.genshin.itismyduty.view.enemy.EnemyActivity
 import xyz.genshin.itismyduty.view.ost.OstActivity

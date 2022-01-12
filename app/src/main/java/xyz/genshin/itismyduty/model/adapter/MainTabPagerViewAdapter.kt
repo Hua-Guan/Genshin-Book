@@ -1,6 +1,5 @@
-package xyz.genshin.itismyduty.model
+package xyz.genshin.itismyduty.model.adapter
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter

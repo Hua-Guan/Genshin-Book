@@ -1,4 +1,4 @@
-package xyz.genshin.itismyduty.model
+package xyz.genshin.itismyduty.model.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import xyz.genshin.itismyduty.R
+import xyz.genshin.itismyduty.model.bean.OverviewBean
 
 /**
  * @author GuanHua
