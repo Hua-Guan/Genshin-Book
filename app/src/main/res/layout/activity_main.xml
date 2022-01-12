@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="Genshin Book"
-            android:textSize="24sp" />
+            android:textSize="24dp" />
 
     </androidx.appcompat.widget.Toolbar>
 

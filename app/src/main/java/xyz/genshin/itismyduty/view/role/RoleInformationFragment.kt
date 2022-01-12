@@ -60,7 +60,7 @@ class RoleInformationFragment(private val roleName: String): Fragment() {
         val mIntroduction = view.findViewById<TextView>(R.id.m_introduction)
 
         val stringRequest = StringRequest(
-            Request.Method.POST, "http://genshin.itismyduty.xyz:8080/GenshinBook?" +
+            Request.Method.GET, "http://genshin.itismyduty.xyz:8080/GenshinBook?" +
                     "request=getRoleInformationAndImageUri&roleName=$roleName",
             { response ->
                 println(response)

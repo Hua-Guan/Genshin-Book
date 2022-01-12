@@ -29,6 +29,13 @@ import kotlin.concurrent.thread
  */
 class RoleFragment : Fragment() {
 
+    companion object{
+
+        const val GET_ALL_ROLE_IMAGE_URI = "getAllRoleImageUri"
+        const val DATABASE_NAME = "GenshinBook"
+
+    }
+
     private var mView: View? = null
     private var list: List<RoleBean>? = null
     private var handler = Handler(Looper.myLooper()!!)
@@ -60,7 +67,7 @@ class RoleFragment : Fragment() {
             gridView = view.findViewById(R.id.role)
             list = ArrayList()
             val stringRequest = StringRequest(
-                Request.Method.POST, "http://genshin.itismyduty.xyz:8080/GenshinBook?request=getAllRoleImageUri",
+                Request.Method.GET, "http://genshin.itismyduty.xyz:8080/$DATABASE_NAME?request=$GET_ALL_ROLE_IMAGE_URI",
                 { response ->
                     val jsonArray = JsonParser.parseString(response).asJsonArray
                     for (item in jsonArray){

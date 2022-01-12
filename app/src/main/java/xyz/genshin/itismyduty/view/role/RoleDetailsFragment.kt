@@ -18,6 +18,15 @@ import xyz.genshin.itismyduty.model.RolePagerViewAdapter
  * @author GuanHua
  */
 class RoleDetailsFragment : Fragment() {
+
+    companion object{
+
+        const val ROLE_INFORMATION = 0
+        const val BASIC_ATTRIBUTES = 1
+        const val CONSTELLATION = 2
+
+    }
+
     private var mView: View? = null
     private var roleName: String? = null
 
@@ -67,11 +76,11 @@ class RoleDetailsFragment : Fragment() {
 
         TabLayoutMediator(tab, pager){tab, position ->
 
-            if (position == 0){
+            if (position == ROLE_INFORMATION){
                 tab.text = "角色信息"
-            }else if (position == 1){
+            }else if (position == BASIC_ATTRIBUTES){
                 tab.text = "基础属性"
-            }else if (position == 2){
+            }else if (position == CONSTELLATION){
                 tab.text = "命之座"
             }
 

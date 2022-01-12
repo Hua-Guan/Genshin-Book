@@ -7,25 +7,25 @@
     tools:context=".view.me.RegisterActivity">
 
     <TextView
-        android:id="@+id/mail"
+        android:id="@+id/account"
         android:layout_width="64dp"
         android:layout_height="48dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="160dp"
         android:gravity="center"
-        android:text="邮箱"
+        android:text="账号"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edit_mail"
+        android:id="@+id/edit_account"
         android:layout_width="160dp"
         android:layout_height="48dp"
         android:hint="请输入邮箱"
-        app:layout_constraintStart_toEndOf="@+id/mail"
-        app:layout_constraintTop_toTopOf="@+id/mail" />
+        app:layout_constraintStart_toEndOf="@+id/account"
+        app:layout_constraintTop_toTopOf="@+id/account" />
 
     <TextView
         android:id="@+id/password"
@@ -36,8 +36,8 @@
         android:text="密码"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/mail"
-        app:layout_constraintTop_toBottomOf="@+id/mail" />
+        app:layout_constraintStart_toStartOf="@+id/account"
+        app:layout_constraintTop_toBottomOf="@+id/account" />
 
     <EditText
         android:id="@+id/edit_password"
@@ -93,6 +93,7 @@
         android:layout_height="48dp"
         android:layout_marginEnd="8dp"
         android:text="发送验证码"
+        android:textSize="@dimen/text_size_12dp"
         app:layout_constraintEnd_toEndOf="@+id/edit_verification_code"
         app:layout_constraintTop_toTopOf="@+id/register" />
 

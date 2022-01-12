@@ -6,14 +6,34 @@
 
     <Button
         android:id="@+id/login_or_register"
-        android:layout_width="300dp"
+        android:layout_width="160dp"
         android:layout_height="56dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:text="登录或注册"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_bubble"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="@+id/login_or_register"
+        app:layout_constraintEnd_toStartOf="@+id/login_or_register"
+        app:layout_constraintTop_toTopOf="@+id/login_or_register" />
+
+    <ListView
+        android:id="@+id/me_list"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_bubble" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

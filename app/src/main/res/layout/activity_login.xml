@@ -24,6 +24,9 @@
         android:layout_width="160dp"
         android:layout_height="48dp"
         android:hint="请输入邮箱"
+        android:textSize="@dimen/edit_text_size"
+        android:maxLines="1"
+        android:inputType="text"
         app:layout_constraintStart_toEndOf="@+id/account"
         app:layout_constraintTop_toTopOf="@+id/account" />
 
@@ -44,6 +47,9 @@
         android:layout_width="160dp"
         android:layout_height="48dp"
         android:hint="请输入密码"
+        android:inputType="numberPassword"
+        android:maxLines="1"
+        android:textSize="@dimen/edit_text_size"
         app:layout_constraintStart_toEndOf="@+id/password"
         app:layout_constraintTop_toTopOf="@+id/password" />
 
@@ -64,5 +70,15 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="@+id/edit_password"
         app:layout_constraintTop_toBottomOf="@+id/edit_password" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:text="登入"
+        app:layout_constraintEnd_toEndOf="@+id/forget_password"
+        app:layout_constraintStart_toStartOf="@+id/quick_register"
+        app:layout_constraintTop_toBottomOf="@+id/quick_register" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
