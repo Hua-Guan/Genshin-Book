@@ -13,14 +13,14 @@ import xyz.genshin.itismyduty.view.me.MeFragment
 class MainTabPagerViewAdapter(activity: FragmentActivity): FragmentStateAdapter(activity) {
 
     companion object{
-        const val ALL = 3
+        const val ALL_TAB = 3
         const val HOME_FRAGMENT = 0
         const val HISTORY_FRAGMENT = 1
         const val ME_FRAGMENT = 2
     }
 
     override fun getItemCount(): Int {
-        return ALL
+        return ALL_TAB
     }
 
     override fun createFragment(position: Int): Fragment {

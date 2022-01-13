@@ -35,29 +35,21 @@ class MeListAdapter(private var context: Context,
             holder.itemName = view.findViewById(R.id.item_name)
             holder.itemGo = view.findViewById(R.id.item_go)
 
-            Glide.with(view)
-                .load(list[position].itemImageUri)
-                .into(holder.itemImage)
+            holder.itemImage.setImageResource(list[position].itemImageUri)
 
             holder.itemName.text = list[position].itemName
 
-            Glide.with(view)
-                .load(list[position].itemGo)
-                .into(holder.itemGo)
+            holder.itemGo.setImageResource(list[position].itemGo)
 
             view.tag = holder
         }else {
             val holder = view.tag as Holder
 
-            Glide.with(view)
-                .load(list[position].itemImageUri)
-                .into(holder.itemImage)
+            holder.itemImage.setImageResource(list[position].itemImageUri)
 
             holder.itemName.text = list[position].itemName
 
-            Glide.with(view)
-                .load(list[position].itemGo)
-                .into(holder.itemGo)
+            holder.itemGo.setImageResource(list[position].itemGo)
         }
         return view
     }

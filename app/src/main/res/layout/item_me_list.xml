@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/item_img"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginStart="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,14 +18,15 @@
         android:layout_width="80dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
+        android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="@+id/item_img"
         app:layout_constraintStart_toEndOf="@+id/item_img"
         app:layout_constraintTop_toTopOf="@+id/item_img" />
 
     <ImageView
         android:id="@+id/item_go"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/item_name"
         app:layout_constraintEnd_toEndOf="parent"
