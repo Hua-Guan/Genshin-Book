@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFF1DA</color>
     <color name="light_yellow">#FDFAF0</color>
+    <color name="split_line">#d8d8d8</color>
 </resources>

@@ -21,14 +21,27 @@
         android:id="@+id/img_bubble"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/shape_round"
         app:layout_constraintBottom_toBottomOf="@+id/login_or_register"
         app:layout_constraintEnd_toStartOf="@+id/login_or_register"
         app:layout_constraintTop_toTopOf="@+id/login_or_register" />
+
+    <View
+        android:id="@+id/split_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/split_line_width"
+        android:background="@color/split_line"
+        app:layout_constraintBottom_toTopOf="@+id/me_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_bubble" />
 
     <ListView
         android:id="@+id/me_list"
         android:layout_width="match_parent"
         android:layout_height="500dp"
+        android:listSelector="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

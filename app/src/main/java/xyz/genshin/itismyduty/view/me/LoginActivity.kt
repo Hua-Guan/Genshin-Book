@@ -74,8 +74,8 @@ class LoginActivity: AppCompatActivity() {
                 }, {}){
                 override fun getParams(): MutableMap<String, String> {
                     val parameters = HashMap<String, String>()
-                    parameters.put("e_mail", account.text.toString())
-                    parameters.put("password", password.text.toString())
+                    parameters["e_mail"] = account.text.toString()
+                    parameters["password"] = password.text.toString()
                     return parameters
                 }
             }

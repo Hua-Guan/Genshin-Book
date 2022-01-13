@@ -22,8 +22,13 @@ class RoleDetailsFragment : Fragment() {
     companion object{
 
         const val ROLE_INFORMATION = 0
+        const val ROLE_INFORMATION_TEXT = "角色信息"
         const val BASIC_ATTRIBUTES = 1
+        const val BASIC_ATTRIBUTES_TEXT = "基础属性"
         const val CONSTELLATION = 2
+        const val CONSTELLATION_TEXT = "命之座"
+        const val TALENT = 3
+        const val TALENT_TEXT = "天赋"
 
     }
 
@@ -77,11 +82,13 @@ class RoleDetailsFragment : Fragment() {
         TabLayoutMediator(tab, pager){tab, position ->
 
             if (position == ROLE_INFORMATION){
-                tab.text = "角色信息"
+                tab.text = ROLE_INFORMATION_TEXT
             }else if (position == BASIC_ATTRIBUTES){
-                tab.text = "基础属性"
+                tab.text = BASIC_ATTRIBUTES_TEXT
             }else if (position == CONSTELLATION){
-                tab.text = "命之座"
+                tab.text = CONSTELLATION_TEXT
+            }else if (position == TALENT){
+                tab.text = TALENT_TEXT
             }
 
         }.attach()

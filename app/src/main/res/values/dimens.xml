@@ -6,4 +6,6 @@
     <dimen name="text_size_16dp">16dp</dimen>
 
     <dimen name="edit_text_size">12dp</dimen>
+
+    <dimen name="split_line_width">1sp</dimen>
 </resources>

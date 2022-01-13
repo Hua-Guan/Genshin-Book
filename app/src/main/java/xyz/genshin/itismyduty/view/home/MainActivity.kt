@@ -15,6 +15,17 @@ import xyz.genshin.itismyduty.model.adapter.MainTabPagerViewAdapter
  */
 class MainActivity : AppCompatActivity() {
 
+    companion object{
+
+        const val TAB_HOME = "主页"
+        const val TAB_HOME_POSITION = 0
+        const val TAB_MUSIC = "音乐"
+        const val TAB_MUSIC_POSITION = 1
+        const val TAB_ME = "我"
+        const val TAB_ME_POSITION = 2
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,12 +37,12 @@ class MainActivity : AppCompatActivity() {
 
         TabLayoutMediator(tab, pager){tab, position ->
 
-            if (position == 0){
-                tab.text = "主页"
-            }else if (position == 1){
-                tab.text = "历史"
-            }else if (position == 2){
-                tab.text = "我"
+            if (position == TAB_HOME_POSITION){
+                tab.text = TAB_HOME
+            }else if (position == TAB_MUSIC_POSITION){
+                tab.text = TAB_MUSIC
+            }else if (position == TAB_ME_POSITION){
+                tab.text = TAB_ME
             }
 
         }.attach()
