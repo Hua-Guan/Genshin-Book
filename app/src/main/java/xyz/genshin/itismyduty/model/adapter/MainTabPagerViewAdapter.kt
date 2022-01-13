@@ -3,7 +3,7 @@ package xyz.genshin.itismyduty.model.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import xyz.genshin.itismyduty.view.history.HistoryFragment
+import xyz.genshin.itismyduty.view.music.MusicFragment
 import xyz.genshin.itismyduty.view.home.HomeFragment
 import xyz.genshin.itismyduty.view.me.MeFragment
 
@@ -29,7 +29,7 @@ class MainTabPagerViewAdapter(activity: FragmentActivity): FragmentStateAdapter(
             return HomeFragment()
 
         }else if (position == HISTORY_FRAGMENT){
-            return HistoryFragment()
+            return MusicFragment()
         }else if (position == ME_FRAGMENT){
             return MeFragment()
         }

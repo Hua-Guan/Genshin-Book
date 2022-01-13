@@ -18,6 +18,13 @@ import xyz.genshin.itismyduty.model.bean.MeListBean
  */
 class MeFragment: Fragment() {
 
+    companion object{
+
+        const val HISTORY_BEAN_ITEM_NAME = "最近浏览"
+        const val FAVORITE_BEAN_ITEM_NAME = "我的收藏"
+
+    }
+
     private var mView: View? = null
 
     override fun onCreateView(
@@ -57,13 +64,13 @@ class MeFragment: Fragment() {
 
         val historyBean = MeListBean()
         historyBean.itemImageUri = R.drawable.ic_history
-        historyBean.itemName = "最近浏览"
+        historyBean.itemName = HISTORY_BEAN_ITEM_NAME
         historyBean.itemGo = R.drawable.ic_to_right
         list.add(historyBean)
 
         val favoriteBean = MeListBean()
         favoriteBean.itemImageUri = R.drawable.ic_favorites
-        favoriteBean.itemName = "我的收藏"
+        favoriteBean.itemName = FAVORITE_BEAN_ITEM_NAME
         favoriteBean.itemGo = R.drawable.ic_to_right
         list.add(favoriteBean)
 

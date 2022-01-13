@@ -1,4 +1,4 @@
-package xyz.genshin.itismyduty.view.history
+package xyz.genshin.itismyduty.view.music
 
 import android.net.Uri
 import android.os.Bundle
@@ -9,12 +9,11 @@ import android.widget.MediaController
 import android.widget.VideoView
 import androidx.fragment.app.Fragment
 import xyz.genshin.itismyduty.R
-import java.net.URI
 
 /**
  * @author GuanHua
  */
-class HistoryFragment: Fragment() {
+class MusicFragment: Fragment() {
 
     private var mView: View? =null
 
@@ -25,7 +24,7 @@ class HistoryFragment: Fragment() {
     ): View? {
 
         if (mView == null){
-            mView = inflater.inflate(R.layout.fragment_history, container, false)
+            mView = inflater.inflate(R.layout.fragment_music, container, false)
         }
 
         return mView
