@@ -34,8 +34,7 @@
         android:background="@color/split_line"
         app:layout_constraintBottom_toTopOf="@+id/me_list"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_bubble" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/me_list"

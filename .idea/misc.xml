@@ -18,7 +18,7 @@
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/activity_role.xml" value="0.2558876811594203" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_history.xml" value="0.22871376811594202" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_home.xml" value="0.25815217391304346" />
-        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_me.xml" value="0.22871376811594202" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_me.xml" value="0.5714285714285714" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_music.xml" value="0.2115036231884058" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role_attributes.xml" value="0.3828571428571429" />
@@ -27,8 +27,10 @@
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role_information.xml" value="0.3828571428571429" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/fragment_role_talent.xml" value="0.2115036231884058" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_me_list.xml" value="0.3828571428571429" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_music_grid.xml" value="0.18857142857142858" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_music_list.xml" value="0.20697463768115942" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_ost_list.xml" value="0.2246376811594203" />
-        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_overview.xml" value="0.6285714285714287" />
+        <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_overview.xml" value="0.42857142857142855" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/layout/item_role.xml" value="0.5142857142857143" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2740740740740741" />
         <entry key="..\:/AndroidProject/GenshinBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2740740740740741" />
