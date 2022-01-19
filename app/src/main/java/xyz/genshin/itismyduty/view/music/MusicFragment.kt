@@ -1,10 +1,12 @@
 package xyz.genshin.itismyduty.view.music
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.MediaController
 import android.widget.VideoView
@@ -24,7 +26,8 @@ class MusicFragment: Fragment() {
 
     }
 
-    private var mView: View? =null
+    private var mView: View? = null
+    private var mGrid: GridView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,12 +44,18 @@ class MusicFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mView?.let { setGridView(it) }
+        mView?.let { initView(it) }
+        setGridView()
+        showMusicList()
     }
 
-    private fun setGridView(mView: View){
+    private fun initView(mView: View){
 
-        val mGrid = mView.findViewById<GridView>(R.id.grid_music)
+        mGrid = mView.findViewById(R.id.grid_music)
+
+    }
+
+    private fun setGridView(){
 
         val mList = ArrayList<MusicGridBean>()
         val mBean = MusicGridBean()
@@ -57,7 +66,17 @@ class MusicFragment: Fragment() {
 
         val mAdapter = activity?.let { MusicGridAdapter(it, mList) }
 
-        mGrid.adapter = mAdapter
+        mGrid?.adapter = mAdapter
+
+    }
+
+    private fun showMusicList(){
+
+        mGrid?.onItemClickListener = AdapterView.OnItemClickListener {
+                parent, view, position, id ->
+            val intent = Intent(activity, MusicListActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 
