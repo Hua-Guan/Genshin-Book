@@ -1,17 +1,25 @@
 package xyz.genshin.itismyduty.view.home
 
+import android.app.ActivityManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.media.MediaBrowserServiceCompat
 import androidx.viewpager2.widget.ViewPager2
 import xyz.genshin.itismyduty.R
 
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import xyz.genshin.itismyduty.model.adapter.MainTabPagerViewAdapter
+import xyz.genshin.itismyduty.server.MusicService
+import xyz.genshin.itismyduty.server.MyService
+import xyz.genshin.itismyduty.utils.Tools
 
 
 /**
@@ -30,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -52,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
         createNotificationChannel()
-
     }
 
     private fun createNotificationChannel() {
@@ -72,6 +80,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
 
 }
