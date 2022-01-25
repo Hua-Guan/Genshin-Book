@@ -36,22 +36,24 @@
     <ListView
         android:id="@+id/music_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="587dp"
-        app:layout_constraintBottom_toTopOf="@+id/background"
+        android:layout_marginBottom="144dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
         android:id="@+id/split_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/split_line_width"
         android:background="@color/split_line"
-        app:layout_constraintBottom_toTopOf="@+id/background"
+        app:layout_constraintBottom_toTopOf="@+id/music_seek_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -59,7 +61,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="24dp"
         android:background="@color/light_yellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,18 +117,11 @@
 
     <SeekBar
         android:id="@+id/music_seek_bar"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_width="300dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="4dp"
         android:progress="0"
-        app:layout_constraintBottom_toTopOf="@+id/blank"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <View
-        android:id="@+id/blank"
-        android:layout_width="match_parent"
-        android:layout_height="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

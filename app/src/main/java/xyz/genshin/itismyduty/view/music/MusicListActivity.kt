@@ -4,11 +4,11 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.content.ComponentName
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
+import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -18,20 +18,19 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.media.MediaBrowserServiceCompat
 import com.bumptech.glide.Glide
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.adapter.MusicListAdapter
 import xyz.genshin.itismyduty.model.bean.MusicListBean
+import xyz.genshin.itismyduty.model.broadcast.MusicStateUpdateBroadcastReceiver
 import xyz.genshin.itismyduty.server.MusicList
 import xyz.genshin.itismyduty.server.MusicService
 import xyz.genshin.itismyduty.utils.Tools
@@ -52,6 +51,8 @@ class MusicListActivity: AppCompatActivity() {
         private const val MUSIC_STATE_KEY = "music_state_key"
         private const val MUSIC_PLAY_STATE_KEY = "music_play_state_key"
         private const val MUSIC_DURATION = "music_duration"
+        private const val MUSIC_CURRENT_POSITION = "MUSIC_CURRENT_POSITION"
+        private const val MUSIC_CURRENT_PLAY_STATE = "MUSIC_CURRENT_PLAY_STATE"
     }
 
     private var mListView: ListView? =null
@@ -60,25 +61,36 @@ class MusicListActivity: AppCompatActivity() {
     private lateinit var mMusicTitle: TextView
     private lateinit var mMusicAuthor: TextView
     private lateinit var mMusicClient: MediaBrowserCompat
-    private lateinit var mMusicData: SharedPreferences
-    private var mMusicState = PlaybackStateCompat.STATE_PAUSED
+    private lateinit var mMusicController: MediaControllerCompat
     private lateinit var mMusicSeekBar: SeekBar
     private lateinit var mMusicDuration: Bundle
-    private var mMusicCurrentTime = 0
+    //private lateinit var br: MusicStateUpdateBroadcastReceiver
+    //private var mIntent = Intent("xyz.genshin.itismyduty.model.broadcast.MusicLatestPositionBroadcastReceiver")
     private val connectionCallbacks = object : MediaBrowserCompat.ConnectionCallback() {
         override fun onConnected() {
             super.onConnected()
             mMusicClient.sessionToken.also {
                 token ->
-                val mMusicController = MediaControllerCompat(
+                mMusicController = MediaControllerCompat(
                     this@MusicListActivity,
                     token
                 )
+                //
                 MediaControllerCompat.setMediaController(this@MusicListActivity, mMusicController)
+                mMusicController.transportControls.prepare()
+                mMusicSeekBar.max = 102000
+                mMusicSeekBar.progress = MusicService.mMusicCurrentPosition
+                //
+                if (MusicService.mMusicCurrentState == PlaybackStateCompat.STATE_PLAYING){
+                    mPlayMusic.setImageResource(R.drawable.ic_pause)
+                }else{
+                    mPlayMusic.setImageResource(R.drawable.ic_play)
+                }
             }
             buildTransportControls()
 
             mMusicClient.subscribe(MusicList.CITY_OF_WINDS_AND_IDYLLS, object : MediaBrowserCompat.SubscriptionCallback() {
+                @RequiresApi(Build.VERSION_CODES.O)
                 override fun onChildrenLoaded(
                     parentId: String,
                     children: MutableList<MediaBrowserCompat.MediaItem>
@@ -94,47 +106,31 @@ class MusicListActivity: AppCompatActivity() {
 
                         mList.add(bean)
                     }
-
                     val mMusicListAdapter = MusicListAdapter(this@MusicListActivity, mList)
 
                     mListView?.adapter = mMusicListAdapter
                 }
             })
         }
-
-        override fun onConnectionSuspended() {
-            super.onConnectionSuspended()
-        }
-
-        override fun onConnectionFailed() {
-            super.onConnectionFailed()
-        }
     }
 
     private var controllerCallback = object : MediaControllerCompat.Callback() {
 
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
-
-
 
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            //改变播放图标
             if (state != null) {
                 if (state.state == PlaybackStateCompat.STATE_PLAYING){
-                    mPlayMusic.setImageResource(R.drawable.ic_pause)
-                    setMusicSeekBar()
-
-                }else if (state.state == PlaybackStateCompat.STATE_PAUSED){
-                    mPlayMusic.setImageResource(R.drawable.ic_play)
+                    mMusicSeekBar.progress = state.position.toInt()
                 }
-                //记录音乐播放的状态
-                mMusicState = state.state
+
             }
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,36 +142,19 @@ class MusicListActivity: AppCompatActivity() {
             setMusicImage()
             setMusicTitle()
             setMusicAuthor()
-            mMusicData = getSharedPreferences(MUSIC_STATE_KEY, MODE_PRIVATE)
         }
-
-        val int = mMusicData.getInt(MUSIC_PLAY_STATE_KEY, PlaybackStateCompat.STATE_PAUSED)
-        if (int == PlaybackStateCompat.STATE_PLAYING) {
-            mPlayMusic.setImageResource(R.drawable.ic_pause)
-        }else if (int == PlaybackStateCompat.STATE_PAUSED){
-            mPlayMusic.setImageResource(R.drawable.ic_play)
-        }
-
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart()
         mMusicClient.connect()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     @SuppressLint("CommitPrefEdits")
     override fun onStop() {
         MediaControllerCompat.getMediaController(this)?.unregisterCallback(controllerCallback)
+        mMusicController.transportControls.stop()
         mMusicClient.disconnect()
-        //保持播放状态
-        val edit = mMusicData.edit()
-        edit.putInt(MUSIC_PLAY_STATE_KEY, mMusicState)
-        edit.apply()
         super.onStop()
     }
 
@@ -222,7 +201,6 @@ class MusicListActivity: AppCompatActivity() {
 
         mMusicTitle.text = "Beckoning"
 
-
     }
 
     private fun setMusicAuthor(){
@@ -231,35 +209,39 @@ class MusicListActivity: AppCompatActivity() {
 
     }
 
-    private fun setMusicSeekBar(){
-
-
-        mMusicSeekBar.max = mMusicDuration.getInt(MUSIC_DURATION)
-
-        val task: TimerTask = object : TimerTask() {
-            override fun run() {
-                mMusicCurrentTime += 1000
-                mMusicSeekBar.progress = mMusicCurrentTime
-            }
-        }
-
-        val timer = Timer()
-        timer.schedule(task, 0, 1000)
-
-    }
-
     fun buildTransportControls(){
-
-        val mMusicController = MediaControllerCompat.getMediaController(this@MusicListActivity)
         mPlayMusic.setOnClickListener {
 
             val pbState = mMusicController.playbackState.state
             if (pbState == PlaybackStateCompat.STATE_PLAYING){
                 mMusicController.transportControls.pause()
+                mPlayMusic.setImageResource(R.drawable.ic_play)
             }else{
                 mMusicController.transportControls.play()
+                mPlayMusic.setImageResource(R.drawable.ic_pause)
             }
+            println("333:::" + pbState)
         }
+
+        mMusicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if (seekBar != null) {
+                    mMusicController.transportControls.seekTo(seekBar.progress.toLong())
+                }
+            }
+
+        })
+
         mMusicController.registerCallback(controllerCallback)
     }
+
 }
+
