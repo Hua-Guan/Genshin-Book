@@ -1,43 +1,28 @@
 package xyz.genshin.itismyduty.view.music
 
-import android.Manifest
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.*
-import android.content.pm.PackageManager
-import android.media.MediaPlayer
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.view.animation.LinearInterpolator
-import android.view.animation.RotateAnimation
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.media.MediaBrowserServiceCompat
 import com.bumptech.glide.Glide
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.adapter.MusicListAdapter
 import xyz.genshin.itismyduty.model.bean.MusicListBean
-import xyz.genshin.itismyduty.model.broadcast.MusicStateUpdateBroadcastReceiver
 import xyz.genshin.itismyduty.server.MusicList
 import xyz.genshin.itismyduty.server.MusicService
 import xyz.genshin.itismyduty.utils.Tools
-import xyz.genshin.itismyduty.view.home.MainActivity
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.properties.Delegates
+import kotlin.math.ceil
 
 /**
  * @author GuanHua
@@ -47,12 +32,8 @@ class MusicListActivity: AppCompatActivity() {
     companion object{
 
         private const val mMusicUri = "https://genshin.itismyduty.xyz/music.jpg"
-        private const val TEST_MUSIC = "https://genshin.itismyduty.xyz/Music/Beckoning.mp3"
-        private const val MUSIC_STATE_KEY = "music_state_key"
-        private const val MUSIC_PLAY_STATE_KEY = "music_play_state_key"
-        private const val MUSIC_DURATION = "music_duration"
-        private const val MUSIC_CURRENT_POSITION = "MUSIC_CURRENT_POSITION"
-        private const val MUSIC_CURRENT_PLAY_STATE = "MUSIC_CURRENT_PLAY_STATE"
+        private const val MUSIC_DATA = "music_data"
+        private const val SEEKBAR_PROGRESS = "seekbar_progress"
     }
 
     private var mListView: ListView? =null
@@ -63,9 +44,9 @@ class MusicListActivity: AppCompatActivity() {
     private lateinit var mMusicClient: MediaBrowserCompat
     private lateinit var mMusicController: MediaControllerCompat
     private lateinit var mMusicSeekBar: SeekBar
+    private var mMusicCurrentPosition = 0
+    private var isStartUpdateTime = false
     private lateinit var mMusicDuration: Bundle
-    //private lateinit var br: MusicStateUpdateBroadcastReceiver
-    //private var mIntent = Intent("xyz.genshin.itismyduty.model.broadcast.MusicLatestPositionBroadcastReceiver")
     private val connectionCallbacks = object : MediaBrowserCompat.ConnectionCallback() {
         override fun onConnected() {
             super.onConnected()
@@ -75,20 +56,9 @@ class MusicListActivity: AppCompatActivity() {
                     this@MusicListActivity,
                     token
                 )
-                //
                 MediaControllerCompat.setMediaController(this@MusicListActivity, mMusicController)
-                mMusicController.transportControls.prepare()
-                mMusicSeekBar.max = 102000
-                mMusicSeekBar.progress = MusicService.mMusicCurrentPosition
-                //
-                if (MusicService.mMusicCurrentState == PlaybackStateCompat.STATE_PLAYING){
-                    mPlayMusic.setImageResource(R.drawable.ic_pause)
-                }else{
-                    mPlayMusic.setImageResource(R.drawable.ic_play)
-                }
             }
             buildTransportControls()
-
             mMusicClient.subscribe(MusicList.CITY_OF_WINDS_AND_IDYLLS, object : MediaBrowserCompat.SubscriptionCallback() {
                 @RequiresApi(Build.VERSION_CODES.O)
                 override fun onChildrenLoaded(
@@ -118,16 +88,18 @@ class MusicListActivity: AppCompatActivity() {
 
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
-
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
             if (state != null) {
-                if (state.state == PlaybackStateCompat.STATE_PLAYING){
+                if (state.state == PlaybackStateCompat.STATE_PAUSED){
+                    mPlayMusic.setImageResource(R.drawable.ic_play)
+                }else if (state.state == PlaybackStateCompat.STATE_PLAYING){
+                    mMusicSeekBar.max = 102000
                     mMusicSeekBar.progress = state.position.toInt()
+                    mPlayMusic.setImageResource(R.drawable.ic_pause)
                 }
-
             }
         }
     }
@@ -135,19 +107,20 @@ class MusicListActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_music_list)
-        if (mListView == null) {
-            initView()
-            setMusicClient()
-            setBack()
-            setMusicImage()
-            setMusicTitle()
-            setMusicAuthor()
-        }
+        initView()
+        setMusicClient()
+        setBack()
+        setMusicImage()
+        setMusicTitle()
+        setMusicAuthor()
     }
 
     override fun onStart() {
         super.onStart()
         mMusicClient.connect()
+        mMusicSeekBar.max = 102000
+        mMusicSeekBar.progress = getSharedPreferences(MUSIC_DATA, MODE_PRIVATE)
+            .getInt(SEEKBAR_PROGRESS, 0)
     }
 
     @SuppressLint("CommitPrefEdits")
@@ -170,48 +143,37 @@ class MusicListActivity: AppCompatActivity() {
     private fun setBack(){
         val back = findViewById<ImageView>(R.id.back)
         back.setOnClickListener {
-
             finish()
-
         }
     }
 
     private fun setMusicClient(){
-
         mMusicClient = MediaBrowserCompat(
             this,
             ComponentName(this, MusicService::class.java),
             connectionCallbacks,
             null
         )
-
     }
 
     private fun setMusicImage(){
-
         Glide.with(this)
             .load(mMusicUri)
             .into(mMusicImage)
         mMusicImage.clipToOutline = true
-
     }
 
     @SuppressLint("SetTextI18n")
     private fun setMusicTitle(){
-
         mMusicTitle.text = "Beckoning"
-
     }
 
     private fun setMusicAuthor(){
-
         mMusicAuthor.text = "陈"
-
     }
 
-    fun buildTransportControls(){
+    private fun buildTransportControls(){
         mPlayMusic.setOnClickListener {
-
             val pbState = mMusicController.playbackState.state
             if (pbState == PlaybackStateCompat.STATE_PLAYING){
                 mMusicController.transportControls.pause()
@@ -220,12 +182,25 @@ class MusicListActivity: AppCompatActivity() {
                 mMusicController.transportControls.play()
                 mPlayMusic.setImageResource(R.drawable.ic_pause)
             }
-            println("333:::" + pbState)
         }
 
         mMusicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-
+                if (fromUser){
+                    mMusicController.transportControls.pause()
+                }
+                if (!isStartUpdateTime) {
+                    val timer = Timer()
+                    val task: TimerTask = object : TimerTask() {
+                        override fun run() {
+                            if (seekBar != null) {
+                                println(Tools.formatSeconds(ceil(((seekBar.progress).toDouble() / 1000)).toInt()))
+                            }
+                        }
+                    }
+                    timer.schedule(task, 0, 1000)
+                    isStartUpdateTime = true
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -237,11 +212,8 @@ class MusicListActivity: AppCompatActivity() {
                     mMusicController.transportControls.seekTo(seekBar.progress.toLong())
                 }
             }
-
         })
-
         mMusicController.registerCallback(controllerCallback)
     }
-
 }
 

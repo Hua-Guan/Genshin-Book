@@ -21,4 +21,39 @@ public class Tools {
         }
         return false;
     }
+
+    /**
+     * 秒转化为天小时分秒字符串
+     * @param seconds
+     * @return String
+     */
+    public static String formatSeconds(int seconds) {
+        String timeStr = "";
+        if (seconds < 10) {
+            timeStr = "0:0" + seconds;
+        }else {
+            timeStr = "0:"+seconds;
+        }
+        if (seconds > 59) {
+            int second = seconds % 60;
+            int min = seconds / 60;
+            if (second < 10){
+                timeStr = min + ":0" + second;
+            }else {
+                timeStr = min + ":" + second;
+            }
+            if (min > 59) {
+                min = (seconds / 60) % 60;
+                int hour = (seconds / 60) / 60;
+                timeStr = hour + ":" + min + ":" + second;
+                if (hour > 23) {
+                    hour = ((seconds / 60) / 60) % 24;
+                    int day = (((seconds / 60) / 60) / 24);
+                    timeStr = day + ":" + hour + ":" + min + ":" + second;
+                }
+            }
+        }
+        return timeStr;
+    }
+
 }
