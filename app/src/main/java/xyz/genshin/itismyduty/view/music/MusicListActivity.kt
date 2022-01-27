@@ -5,6 +5,8 @@ import android.content.*
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
@@ -33,20 +35,23 @@ class MusicListActivity: AppCompatActivity() {
 
         private const val mMusicUri = "https://genshin.itismyduty.xyz/music.jpg"
         private const val MUSIC_DATA = "music_data"
+        private const val MUSIC_DURATION = "music_duration"
         private const val SEEKBAR_PROGRESS = "seekbar_progress"
     }
+
+    private val handler = Handler(Looper.myLooper()!!)
 
     private var mListView: ListView? =null
     private lateinit var mPlayMusic: ImageView
     private lateinit var mMusicImage: ImageView
     private lateinit var mMusicTitle: TextView
     private lateinit var mMusicAuthor: TextView
+    private lateinit var mMusicTime: TextView
+    private lateinit var mMusicAllTime: TextView
     private lateinit var mMusicClient: MediaBrowserCompat
     private lateinit var mMusicController: MediaControllerCompat
     private lateinit var mMusicSeekBar: SeekBar
-    private var mMusicCurrentPosition = 0
     private var isStartUpdateTime = false
-    private lateinit var mMusicDuration: Bundle
     private val connectionCallbacks = object : MediaBrowserCompat.ConnectionCallback() {
         override fun onConnected() {
             super.onConnected()
@@ -72,7 +77,6 @@ class MusicListActivity: AppCompatActivity() {
                         bean.mMusicImageUri = item.description.iconUri.toString()
                         bean.mMusicAuthor = item.description.subtitle.toString()
                         bean.mMusicName = item.description.title.toString()
-                        mMusicDuration = item.description.extras!!
 
                         mList.add(bean)
                     }
@@ -88,6 +92,9 @@ class MusicListActivity: AppCompatActivity() {
 
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
+            if (metadata != null) {
+                mMusicSeekBar.max = metadata.getLong(MUSIC_DURATION).toInt()
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -96,7 +103,6 @@ class MusicListActivity: AppCompatActivity() {
                 if (state.state == PlaybackStateCompat.STATE_PAUSED){
                     mPlayMusic.setImageResource(R.drawable.ic_play)
                 }else if (state.state == PlaybackStateCompat.STATE_PLAYING){
-                    mMusicSeekBar.max = 102000
                     mMusicSeekBar.progress = state.position.toInt()
                     mPlayMusic.setImageResource(R.drawable.ic_pause)
                 }
@@ -138,6 +144,8 @@ class MusicListActivity: AppCompatActivity() {
         mMusicTitle = findViewById(R.id.music_title)
         mMusicAuthor = findViewById(R.id.music_author)
         mMusicSeekBar = findViewById(R.id.music_seek_bar)
+        mMusicTime = findViewById(R.id.music_time)
+        mMusicAllTime = findViewById(R.id.music_all_time)
     }
 
     private fun setBack(){
@@ -179,7 +187,7 @@ class MusicListActivity: AppCompatActivity() {
                 mMusicController.transportControls.pause()
                 mPlayMusic.setImageResource(R.drawable.ic_play)
             }else{
-                mMusicController.transportControls.play()
+                mMusicController.transportControls.prepare()
                 mPlayMusic.setImageResource(R.drawable.ic_pause)
             }
         }
@@ -194,7 +202,9 @@ class MusicListActivity: AppCompatActivity() {
                     val task: TimerTask = object : TimerTask() {
                         override fun run() {
                             if (seekBar != null) {
-                                println(Tools.formatSeconds(ceil(((seekBar.progress).toDouble() / 1000)).toInt()))
+                                handler.post {
+                                    mMusicTime.text = Tools.formatSeconds(ceil(((seekBar.progress).toDouble() / 1000)).toInt())
+                                }
                             }
                         }
                     }

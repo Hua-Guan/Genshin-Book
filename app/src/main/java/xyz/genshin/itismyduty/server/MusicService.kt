@@ -18,6 +18,7 @@ import androidx.media.MediaBrowserServiceCompat
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import android.support.v4.media.MediaMetadataCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import java.util.*
 import kotlin.collections.ArrayList
@@ -36,9 +37,8 @@ class MusicService : MediaBrowserServiceCompat() {
 
     private var mediaSession: MediaSessionCompat? =null
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
-    private lateinit var mMusicDuration: Bundle
     private var mMediaPlayer = MediaPlayer()
-    private var isMusicLoaded = false
+    private var mMusicHasLoad = false
     private lateinit var timer: Timer
 
     @SuppressLint("RestrictedApi")
@@ -78,8 +78,6 @@ class MusicService : MediaBrowserServiceCompat() {
     ) {
         if (parentId == MusicList.CITY_OF_WINDS_AND_IDYLLS){
             //音乐持续时间
-            mMusicDuration = Bundle()
-            mMusicDuration.putInt(MUSIC_DURATION, 102000)
             val musicList = ArrayList<MediaBrowserCompat.MediaItem>()
             val desc = MediaDescriptionCompat.Builder()
                 .setMediaId(MusicList.CITY_OF_WINDS_AND_IDYLLS)
@@ -87,7 +85,6 @@ class MusicService : MediaBrowserServiceCompat() {
                 .setIconUri(Uri.parse("https://genshin.itismyduty.xyz/music.jpg"))
                 .setTitle("Beckoning")
                 .setSubtitle("陈")
-                .setExtras(mMusicDuration)
                 .build()
             val item = MediaBrowserCompat.MediaItem(desc, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
             musicList.add(item)
@@ -98,31 +95,36 @@ class MusicService : MediaBrowserServiceCompat() {
     }
 
     private val mSessionCallback = object : MediaSessionCompat.Callback(){
+
         @RequiresApi(Build.VERSION_CODES.O)
-        override fun onPlay() {
-            if (!isMusicLoaded) {
+        override fun onPrepare() {
+            super.onPrepare()
+            if (!mMusicHasLoad) {
                 mMediaPlayer.reset()
                 mMediaPlayer.setDataSource(TEST_MUSIC)
                 mMediaPlayer.prepareAsync()
                 mMediaPlayer.setOnPreparedListener {
-                    mMediaPlayer.start()
-                    mMediaPlayer.setOnCompletionListener {
-                        onPause()
-                    }
-                    isMusicLoaded = true
-                    //更新数据
                     mediaSession?.isActive = true
-                    updateSeekBar()
+                    mediaSession?.setMetadata(
+                        MediaMetadataCompat.Builder()
+                            .putLong(MUSIC_DURATION, mMediaPlayer.duration.toLong())
+                            .build()
+                    )
+                    onPlay()
+                    mMusicHasLoad = true
                 }
-            }else {
-                mMediaPlayer.start()
-                mMediaPlayer.setOnCompletionListener {
-                    onPause()
-                }
-                updateSeekBar()
-                //更新数据
-                mediaSession?.isActive = true
+            }else{
+                onPlay()
             }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onPlay() {
+            mMediaPlayer.start()
+            mMediaPlayer.setOnSeekCompleteListener {
+                onPause()
+            }
+            updateSeekBar()
             //启动服务
             startService(Intent(this@MusicService, MusicService::class.java))
             setNotification()
@@ -130,20 +132,26 @@ class MusicService : MediaBrowserServiceCompat() {
 
         @SuppressLint("CommitPrefEdits")
         override fun onPause() {
-            mMediaPlayer.pause()
-            timer.cancel()
-            setPauseState()
-            getSharedPreferences(MUSIC_DATA, MODE_PRIVATE).edit()
-                .putInt(SEEKBAR_PROGRESS, mMediaPlayer.currentPosition)
-                .apply()
-            mediaSession?.isActive = false
+            if (mMusicHasLoad) {
+                mMediaPlayer.pause()
+                timer.cancel()
+                setPauseState()
+                getSharedPreferences(MUSIC_DATA, MODE_PRIVATE).edit()
+                    .putInt(SEEKBAR_PROGRESS, mMediaPlayer.currentPosition)
+                    .apply()
+            }else{
+                mMediaPlayer.reset()
+                setPauseState()
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onSeekTo(pos: Long) {
             super.onSeekTo(pos)
             mMediaPlayer.seekTo(pos.toInt())
-            onPlay()
+            mMediaPlayer.setOnSeekCompleteListener {
+                onPlay()
+            }
         }
     }
 
@@ -159,6 +167,7 @@ class MusicService : MediaBrowserServiceCompat() {
 
     private fun setPlayState(){
         //设置状态
+        mediaSession?.isActive = true
         stateBuilder = PlaybackStateCompat.Builder()
             .setState(PlaybackStateCompat.STATE_PLAYING,
                 mMediaPlayer.currentPosition.toLong(),
@@ -169,6 +178,7 @@ class MusicService : MediaBrowserServiceCompat() {
 
     private fun setPauseState(){
         //更新状态
+        mediaSession?.isActive = false
         stateBuilder = PlaybackStateCompat.Builder()
             .setState(PlaybackStateCompat.STATE_PAUSED, 0,
                 1f

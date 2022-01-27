@@ -46,7 +46,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0" >
+    </ListView>
 
     <View
         android:id="@+id/split_line"
@@ -56,6 +57,25 @@
         app:layout_constraintBottom_toTopOf="@+id/music_seek_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/music_time"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center_vertical"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/music_seek_bar"
+        app:layout_constraintEnd_toStartOf="@+id/music_seek_bar"
+        app:layout_constraintTop_toTopOf="@+id/music_seek_bar" />
+
+    <TextView
+        android:id="@+id/music_all_time"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/music_seek_bar"
+        app:layout_constraintStart_toEndOf="@+id/music_seek_bar"
+        app:layout_constraintTop_toTopOf="@+id/music_seek_bar" />
 
     <View
         android:id="@+id/background"
@@ -117,7 +137,7 @@
 
     <SeekBar
         android:id="@+id/music_seek_bar"
-        android:layout_width="300dp"
+        android:layout_width="280dp"
         android:layout_height="32dp"
         android:layout_marginBottom="4dp"
         android:progress="0"
