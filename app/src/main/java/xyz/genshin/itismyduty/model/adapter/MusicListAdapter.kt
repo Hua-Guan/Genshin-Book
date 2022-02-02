@@ -23,7 +23,7 @@ class MusicListAdapter(private var context: Context,
     }
 
     override fun getItemId(position: Int): Long {
-        return list[position].hashCode().toLong()
+        return list[position].mMusicId.toLong()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
