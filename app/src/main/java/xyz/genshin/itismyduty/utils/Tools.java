@@ -2,8 +2,12 @@ package xyz.genshin.itismyduty.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Tools {
     public static boolean isServiceRunning(Context context, String ServiceName) {
@@ -16,6 +20,30 @@ public class Tools {
         for (int i = 0; i < runningService.size(); i++) {
             if (runningService.get(i).service.getClassName().toString()
                     .equals(ServiceName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @params componentName 查询指定service的组件名；
+     * e.g. com.hr.life.trnfa.service.services.MqttConnectService
+     *
+     * @return boolean 返回该服务是否在运行中；
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean serverIsRunning(Context context, String componentName) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        List<ActivityManager.RunningServiceInfo> runningServices
+                = activityManager.getRunningServices(Integer.MAX_VALUE);
+        if (runningServices.size() <= 0) {
+            return false;
+        }
+
+        for (ActivityManager.RunningServiceInfo serviceInfo : runningServices) {
+            if (componentName.equals(serviceInfo.service.getClassName())) {
                 return true;
             }
         }

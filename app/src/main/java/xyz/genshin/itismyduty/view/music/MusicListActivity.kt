@@ -261,6 +261,7 @@ class MusicListActivity: AppCompatActivity() {
         })
 
         mListView?.setOnItemClickListener { parent, view, position, id ->
+            mProgressAnimator.cancel()
             mCurrentMusicId = id.toInt()
             mediaController.transportControls.prepareFromMediaId(mCurrentMusicId.toString(), null)
         }

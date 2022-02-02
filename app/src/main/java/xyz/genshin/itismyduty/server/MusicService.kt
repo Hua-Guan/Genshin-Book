@@ -1,26 +1,25 @@
 package xyz.genshin.itismyduty.server
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.PackageManagerCompat.LOG_TAG
 import androidx.media.MediaBrowserServiceCompat
-import android.content.IntentFilter
-import android.support.v4.media.MediaMetadataCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import xyz.genshin.itismyduty.model.broadcast.LongPressHomeBroadcastReceiver
-import java.sql.Time
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MusicService : MediaBrowserServiceCompat() {
@@ -37,6 +36,7 @@ class MusicService : MediaBrowserServiceCompat() {
     }
 
     private var mediaSession: MediaSessionCompat? =null
+    private var isServiceRunning = false
     private lateinit var mMusicList : ArrayList<MediaBrowserCompat.MediaItem>
     private var mMusicUri = "https://genshin.itismyduty.xyz/Music/Beckoning.mp3"
     private var mMusicUri1 = "https://genshin.itismyduty.xyz/Music/BeginsTheJourney.mp3"
@@ -153,9 +153,12 @@ class MusicService : MediaBrowserServiceCompat() {
                 onSkipToNext()
             }
             setPlayState()
-            //启动服务
-            startService(Intent(this@MusicService, MusicService::class.java))
-            setNotification()
+            if (!isServiceRunning){
+                //启动服务
+                startForegroundService(Intent(this@MusicService, MusicService::class.java))
+                setNotification()
+                isServiceRunning = true
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -224,7 +227,19 @@ class MusicService : MediaBrowserServiceCompat() {
         val builder = NotificationCompat.Builder(this@MusicService, "1")
         builder.setContentTitle("33")
         builder.setContentIntent(mediaSession?.controller?.sessionActivity)
+        builder.setAutoCancel(true)
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         startForeground(1, builder.build())
     }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
 }

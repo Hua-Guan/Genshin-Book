@@ -52,14 +52,6 @@
             android:name=".server.MusicService"
             android:exported="false">
             <intent-filter>
-
-                <action android:name="android.media.browse.MediaBrowserService"/>
-
-            </intent-filter>
-        </service>
-        <service android:name=".server.MyService"
-            android:exported="false">
-            <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
         </service>
