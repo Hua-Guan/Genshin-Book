@@ -2,22 +2,14 @@ package xyz.genshin.itismyduty.view.me
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.adapter.MeListAdapter
 import xyz.genshin.itismyduty.model.bean.MeListBean
 
-
-/**
- * @author GuanHua
- */
-@Deprecated("已换成activity")
-class MeFragment: Fragment() {
+class MeActivity: AppCompatActivity() {
 
     companion object{
 
@@ -26,40 +18,24 @@ class MeFragment: Fragment() {
 
     }
 
-    private var mView: View? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        if (mView == null){
-            mView = inflater.inflate(R.layout.fragment_me, container, false)
-        }
-
-        return mView
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_me)
+        setLoginOrRegister()
+        setMeListView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setLoginOrRegister(){
 
-        setLoginOrRegister(view)
-
-        setMeListView(view)
-    }
-
-    private fun setLoginOrRegister(mView: View){
-
-        var loginOrRegister = mView.findViewById<Button>(R.id.login_or_register)
+        val loginOrRegister = findViewById<Button>(R.id.login_or_register)
         loginOrRegister.setOnClickListener {
 
-            val intent = Intent(activity, LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }
 
-    private fun setMeListView(mView: View){
+    private fun setMeListView(){
 
         val list = ArrayList<MeListBean>()
 
@@ -75,8 +51,8 @@ class MeFragment: Fragment() {
         favoriteBean.itemGo = R.drawable.ic_to_right
         list.add(favoriteBean)
 
-        val meListView = mView.findViewById<ListView>(R.id.me_list)
-        val adapter = context?.let { MeListAdapter(it, list) }
+        val meListView = findViewById<ListView>(R.id.me_list)
+        val adapter = MeListAdapter(this, list)
         meListView.adapter = adapter
 
     }

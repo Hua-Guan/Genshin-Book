@@ -2,21 +2,14 @@ package xyz.genshin.itismyduty.view.music
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.adapter.MusicGridAdapter
 import xyz.genshin.itismyduty.model.bean.MusicGridBean
 
-/**
- * @author GuanHua
- */
-@Deprecated("已换成activity")
-class MusicFragment: Fragment() {
+class MusicActivity: AppCompatActivity() {
 
     companion object{
 
@@ -24,32 +17,19 @@ class MusicFragment: Fragment() {
 
     }
 
-    private var mView: View? = null
     private var mGrid: GridView? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        if (mView == null){
-            mView = inflater.inflate(R.layout.fragment_music, container, false)
-        }
-
-        return mView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mView?.let { initView(it) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_music)
+        initView()
         setGridView()
         showMusicList()
     }
 
-    private fun initView(mView: View){
+    private fun initView(){
 
-        mGrid = mView.findViewById(R.id.grid_music)
+        mGrid = findViewById(R.id.grid_music)
 
     }
 
@@ -62,7 +42,7 @@ class MusicFragment: Fragment() {
         mBean.mMusicName = "44"
         mList.add(mBean)
 
-        val mAdapter = activity?.let { MusicGridAdapter(it, mList) }
+        val mAdapter = MusicGridAdapter(this, mList)
 
         mGrid?.adapter = mAdapter
 
@@ -72,7 +52,7 @@ class MusicFragment: Fragment() {
 
         mGrid?.onItemClickListener = AdapterView.OnItemClickListener {
                 parent, view, position, id ->
-            val intent = Intent(activity, MusicListActivity::class.java)
+            val intent = Intent(this, MusicListActivity::class.java)
             startActivity(intent)
         }
 

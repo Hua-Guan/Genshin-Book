@@ -10,6 +10,7 @@ import xyz.genshin.itismyduty.view.me.MeFragment
 /**
  * @author GuanHua
  */
+@Deprecated("已换成其他方案")
 class MainTabPagerViewAdapter(activity: FragmentActivity): FragmentStateAdapter(activity) {
 
     companion object{

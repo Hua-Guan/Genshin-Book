@@ -8,8 +8,11 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.commit
 import androidx.media.MediaBrowserServiceCompat
 import androidx.viewpager2.widget.ViewPager2
 import xyz.genshin.itismyduty.R
@@ -20,6 +23,8 @@ import xyz.genshin.itismyduty.model.adapter.MainTabPagerViewAdapter
 import xyz.genshin.itismyduty.server.MusicService
 import xyz.genshin.itismyduty.server.MyService
 import xyz.genshin.itismyduty.utils.Tools
+import xyz.genshin.itismyduty.view.me.MeFragment
+import xyz.genshin.itismyduty.view.music.MusicFragment
 
 
 /**
@@ -38,29 +43,61 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    val home = HomeFragment()
+    val music = MusicFragment()
+    val me = MeFragment()
+
+    private lateinit var fragmentContainer: FragmentContainerView
+    private lateinit var imageHome: ImageView
+    private lateinit var imageMusic: ImageView
+    private lateinit var imageMe: ImageView
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val tab = findViewById<TabLayout>(R.id.tab)
-        val pager = findViewById<ViewPager2>(R.id.pager)
-        val adapter = MainTabPagerViewAdapter(this)
-        pager.adapter = adapter
+        initView()
 
-        TabLayoutMediator(tab, pager){tab, position ->
+        initHomeFragment()
 
-            if (position == TAB_HOME_POSITION){
-                tab.text = TAB_HOME
-            }else if (position == TAB_MUSIC_POSITION){
-                tab.text = TAB_MUSIC
-            }else if (position == TAB_ME_POSITION){
-                tab.text = TAB_ME
-            }
-
-        }.attach()
+        setClickListener()
 
         createNotificationChannel()
+    }
+
+    private fun initView(){
+        imageHome = findViewById(R.id.img_home)
+        imageMusic = findViewById(R.id.img_music)
+        imageMe = findViewById(R.id.img_me)
+    }
+
+    private fun initHomeFragment(){
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            add(R.id.container_view, home)
+        }
+    }
+
+    private fun setClickListener(){
+        imageHome.setOnClickListener {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.container_view, home)
+            }
+        }
+        imageMusic.setOnClickListener {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.container_view, music)
+            }
+        }
+        imageMe.setOnClickListener {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.container_view, me)
+            }
+        }
     }
 
     private fun createNotificationChannel() {
