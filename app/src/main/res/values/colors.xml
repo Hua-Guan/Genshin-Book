@@ -10,4 +10,6 @@
     <color name="yellow">#FFF1DA</color>
     <color name="light_yellow">#FDFAF0</color>
     <color name="split_line">#d8d8d8</color>
+    <color name="text_yellow">#f4ea2a</color>
+    <color name="text_default">#8A000000</color>
 </resources>

@@ -16,7 +16,6 @@ import xyz.genshin.itismyduty.model.bean.MeListBean
 /**
  * @author GuanHua
  */
-@Deprecated("已换成activity")
 class MeFragment: Fragment() {
 
     companion object{

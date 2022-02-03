@@ -22,7 +22,6 @@ import xyz.genshin.itismyduty.view.role.RoleActivity
 /**
  * @author GuanHua
  */
-@Deprecated("已换成activity")
 class HomeFragment: Fragment() {
 
     companion object{

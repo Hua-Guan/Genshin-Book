@@ -15,7 +15,6 @@ import xyz.genshin.itismyduty.model.bean.MusicGridBean
 /**
  * @author GuanHua
  */
-@Deprecated("已换成activity")
 class MusicFragment: Fragment() {
 
     companion object{
