@@ -3,7 +3,6 @@ package xyz.genshin.itismyduty.view.music
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.*
-import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,12 +11,10 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.bumptech.glide.Glide
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.adapter.MusicListAdapter
@@ -25,10 +22,8 @@ import xyz.genshin.itismyduty.model.bean.MusicListBean
 import xyz.genshin.itismyduty.server.MusicConst
 import xyz.genshin.itismyduty.server.MusicConst.Companion.MUSIC_DATA
 import xyz.genshin.itismyduty.server.MusicConst.Companion.MUSIC_MAX_PROGRESS
-import xyz.genshin.itismyduty.server.MusicConst.Companion.SEEKBAR_PROGRESS
 import xyz.genshin.itismyduty.server.MusicService
 import xyz.genshin.itismyduty.utils.Tools
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.ceil
 
@@ -40,12 +35,12 @@ class MusicListActivity: AppCompatActivity() {
     companion object{
         private const val mMusicUri = "https://genshin.itismyduty.xyz/music.jpg"
         private const val MUSIC_DURATION = "music_duration"
-        private const val PLAY_STATE = "PLAY_STATE"
     }
 
     private val handler = Handler(Looper.myLooper()!!)
 
     private var mListView: ListView? =null
+    private lateinit var mMusicList : MutableList<MediaBrowserCompat.MediaItem>
     private lateinit var mPlayMusic: ImageView
     private lateinit var mMusicNext: ImageView
     private lateinit var mMusicImage: ImageView
@@ -62,54 +57,9 @@ class MusicListActivity: AppCompatActivity() {
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onConnected() {
             super.onConnected()
-            mMusicClient.sessionToken.also {
-                token ->
-                mMusicController = MediaControllerCompat(
-                    this@MusicListActivity,
-                    token
-                )
-                MediaControllerCompat.setMediaController(this@MusicListActivity, mMusicController)
-            }
+            initMusicControl()
             buildTransportControls()
-            mMusicClient.subscribe(MusicConst.CITY_OF_WINDS_AND_IDYLLS, object : MediaBrowserCompat.SubscriptionCallback() {
-                @RequiresApi(Build.VERSION_CODES.O)
-                override fun onChildrenLoaded(
-                    parentId: String,
-                    children: MutableList<MediaBrowserCompat.MediaItem>
-                ) {
-                    val mList = ArrayList<MusicListBean>()
-                    for ((id, item) in children.withIndex()){
-                        val bean = MusicListBean()
-                        bean.mMusicImageUri = item.description.iconUri.toString()
-                        bean.mMusicId = id
-                        bean.mMusicAuthor = item.description.subtitle.toString()
-                        bean.mMusicName = item.description.title.toString()
-
-                        mList.add(bean)
-                    }
-                    val mMusicListAdapter = MusicListAdapter(this@MusicListActivity, mList)
-
-                    mListView?.adapter = mMusicListAdapter
-                    //设置SeekBar的值
-                    val extras = children[0].description.extras
-                    if (extras != null) {
-                        if (extras.getBoolean(MusicConst.MUSIC_IS_PLAYING, false)){
-                            mMusicSeekBar.max = extras.getInt(MUSIC_MAX_PROGRESS, 0)
-                            mMusicSeekBar.progress = extras.getInt(MusicConst.MUSIC_CURRENT_PROGRESS, 0)
-                            mMusicAllTime.text = Tools.formatSeconds(ceil(((mMusicSeekBar.max).toDouble() / 1000)).toInt())
-                            mProgressAnimator = ValueAnimator.ofInt(mMusicSeekBar.progress, mMusicSeekBar.max)
-                            mProgressAnimator.duration = (mMusicSeekBar.max - mMusicSeekBar.progress).toLong()
-                            mProgressAnimator.interpolator = LinearInterpolator()
-                            mProgressAnimator.addUpdateListener {
-                                mMusicSeekBar.progress = it.animatedValue as Int
-                            }
-                            mProgressAnimator.start()
-                            //设置播放图标
-                            mPlayMusic.setImageResource(R.drawable.ic_pause)
-                        }
-                    }
-                }
-            })
+            initListView()
         }
     }
 
@@ -124,6 +74,8 @@ class MusicListActivity: AppCompatActivity() {
                     .putInt(MUSIC_MAX_PROGRESS, mMusicSeekBar.max)
                     .apply()
                 mMusicAllTime.text = Tools.formatSeconds(ceil(((mMusicSeekBar.max).toDouble() / 1000)).toInt())
+                setMusicTitle(metadata.getString(MusicConst.MUSIC_TITLE))
+                setMusicAuthor(metadata.getString(MusicConst.MUSIC_AUTHOR))
             }
         }
 
@@ -135,15 +87,7 @@ class MusicListActivity: AppCompatActivity() {
                     mProgressAnimator.cancel()
                 }else if (state.state == PlaybackStateCompat.STATE_PLAYING){
                     mPlayMusic.setImageResource(R.drawable.ic_pause)
-                    val timeToEnd = mMusicSeekBar.max - state.position
-                    mProgressAnimator = ValueAnimator.ofInt(state.position.toInt(), mMusicSeekBar.max)
-                    mProgressAnimator.duration = timeToEnd
-                    mProgressAnimator.interpolator = LinearInterpolator()
-                    mProgressAnimator.addUpdateListener {
-                        mMusicSeekBar.progress = it.animatedValue as Int
-                    }
-                    mProgressAnimator.start()
-
+                    setSeekBarAnimation(state.position.toInt())
                 }else if (state.state == PlaybackStateCompat.STATE_SKIPPING_TO_NEXT){
                     mProgressAnimator.cancel()
                 }
@@ -158,8 +102,6 @@ class MusicListActivity: AppCompatActivity() {
         setMusicClient()
         setBack()
         setMusicImage()
-        setMusicTitle()
-        setMusicAuthor()
     }
 
     override fun onStart() {
@@ -212,16 +154,24 @@ class MusicListActivity: AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setMusicTitle(){
-        mMusicTitle.text = "Beckoning"
+    private fun setMusicTitle(title : String){
+        mMusicTitle.text = title
     }
 
-    private fun setMusicAuthor(){
-        mMusicAuthor.text = "陈"
+    private fun setMusicAuthor(author : String){
+        mMusicAuthor.text = author
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun buildTransportControls(){
+        setPlayControl()
+        setNextControl()
+        setSeekBarControl()
+        setListViewControl()
+        mMusicController.registerCallback(controllerCallback)
+    }
+
+    private fun setPlayControl(){
         mPlayMusic.setOnClickListener {
             val pbState = mMusicController.playbackState.state
             if (pbState == PlaybackStateCompat.STATE_PLAYING){
@@ -233,11 +183,15 @@ class MusicListActivity: AppCompatActivity() {
                 mPlayMusic.setImageResource(R.drawable.ic_pause)
             }
         }
+    }
 
+    private fun setNextControl(){
         mMusicNext.setOnClickListener {
             mMusicController.transportControls.skipToNext()
         }
+    }
 
+    private fun setSeekBarControl(){
         mMusicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 handler.post {
@@ -259,14 +213,105 @@ class MusicListActivity: AppCompatActivity() {
                 }
             }
         })
+    }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun setListViewControl(){
         mListView?.setOnItemClickListener { parent, view, position, id ->
             mProgressAnimator.cancel()
             mCurrentMusicId = id.toInt()
             mediaController.transportControls.prepareFromMediaId(mCurrentMusicId.toString(), null)
         }
+    }
 
-        mMusicController.registerCallback(controllerCallback)
+    private fun initListView(){
+        mMusicClient.subscribe(MusicConst.CITY_OF_WINDS_AND_IDYLLS, object : MediaBrowserCompat.SubscriptionCallback() {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onChildrenLoaded(
+                parentId: String,
+                children: MutableList<MediaBrowserCompat.MediaItem>
+            ) {
+                mMusicList = children
+                val mList = ArrayList<MusicListBean>()
+                for ((id, item) in children.withIndex()){
+                    val bean = MusicListBean()
+                    bean.mMusicImageUri = item.description.iconUri.toString()
+                    bean.mMusicId = id
+                    bean.mMusicAuthor = item.description.subtitle.toString()
+                    bean.mMusicName = item.description.title.toString()
+
+                    mList.add(bean)
+                }
+                val mMusicListAdapter = MusicListAdapter(this@MusicListActivity, mList)
+
+                mListView?.adapter = mMusicListAdapter
+                //设置SeekBar的值
+                val extras = children[0].description.extras
+                if (extras != null) {
+                    if (extras.getBoolean(MusicConst.MUSIC_IS_PLAYING, false)){
+                        setSeekBarMax(extras.getInt(MUSIC_MAX_PROGRESS, 0))
+                        setSeekBarProgress(extras.getInt(MusicConst.MUSIC_CURRENT_PROGRESS, 0))
+                        setSeekBarTextMax(mMusicSeekBar.max)
+                        setSeekBarAnimation()
+                        //设置播放图标
+                        mPlayMusic.setImageResource(R.drawable.ic_pause)
+                    }else{
+                        setSeekBarMax(extras.getInt(MUSIC_MAX_PROGRESS, 0))
+                        setSeekBarProgress(extras.getInt(MusicConst.MUSIC_CURRENT_PROGRESS, 0))
+                        mMusicAllTime.text = Tools.formatSeconds(ceil(((mMusicSeekBar.max).toDouble() / 1000)).toInt())
+                    }
+                }
+                //设置当第一次启动service时的music
+                initMusic()
+            }
+        })
+    }
+
+    private fun initMusicControl(){
+        mMusicClient.sessionToken.also {
+                token ->
+            mMusicController = MediaControllerCompat(
+                this@MusicListActivity,
+                token
+            )
+            MediaControllerCompat.setMediaController(this@MusicListActivity, mMusicController)
+        }
+    }
+
+    /**
+     * 设置当service第一次启动时要播放的音乐，一般是音乐列表的第一首
+     */
+    private fun initMusic(){
+        mMusicController.transportControls.prepare()
+    }
+
+    private fun setSeekBarProgress(progress: Int){
+        mMusicSeekBar.progress = progress
+    }
+    private fun setSeekBarMax(max: Int){
+        mMusicSeekBar.max = max
+    }
+    private fun setSeekBarTextMax(max: Int){
+        mMusicAllTime.text = Tools.formatSeconds(ceil(((max).toDouble() / 1000)).toInt())
+    }
+    private fun setSeekBarAnimation(){
+        mProgressAnimator = ValueAnimator.ofInt(mMusicSeekBar.progress, mMusicSeekBar.max)
+        mProgressAnimator.duration = (mMusicSeekBar.max - mMusicSeekBar.progress).toLong()
+        mProgressAnimator.interpolator = LinearInterpolator()
+        mProgressAnimator.addUpdateListener {
+            setSeekBarProgress(it.animatedValue as Int)
+        }
+        mProgressAnimator.start()
+    }
+    private fun setSeekBarAnimation(currentPosition: Int){
+        val timeToEnd = mMusicSeekBar.max - currentPosition
+        mProgressAnimator = ValueAnimator.ofInt(currentPosition, mMusicSeekBar.max)
+        mProgressAnimator.duration = timeToEnd.toLong()
+        mProgressAnimator.interpolator = LinearInterpolator()
+        mProgressAnimator.addUpdateListener {
+            mMusicSeekBar.progress = it.animatedValue as Int
+        }
+        mProgressAnimator.start()
     }
 }
 

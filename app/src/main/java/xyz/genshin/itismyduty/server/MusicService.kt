@@ -28,11 +28,6 @@ class MusicService : MediaBrowserServiceCompat() {
         private const val MY_MEDIA_ROOT_ID = "genshin_music"
         private const val PACKAGE_NAME = "xyz.genshin.itismyduty"
         private const val MUSIC_DURATION = "music_duration"
-        private const val MUSIC_DATA = "music_data"
-        private const val SEEKBAR_CURRENT_PROGRESS = "SEEKBAR_CURRENT_PROGRESS"
-        private const val ACTION_SEEKBAR = "ACTION_SEEKBAR"
-        private const val SEEKBAR_PROGRESS = "seekbar_progress"
-        private const val PLAY_STATE = "PLAY_STATE"
     }
 
     private var mediaSession: MediaSessionCompat? =null
@@ -43,27 +38,13 @@ class MusicService : MediaBrowserServiceCompat() {
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
     private var mCurrentMusicMediaId = "0"
     private val mMediaPlayer = MediaPlayer()
-
+    private var hasInitMusic = false
     private val longPressHomeBroadcast = LongPressHomeBroadcastReceiver()
 
     @SuppressLint("RestrictedApi")
     override fun onCreate() {
         super.onCreate()
-        mediaSession = MediaSessionCompat(baseContext, LOG_TAG).apply {
-            setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-                    or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
-
-            stateBuilder = PlaybackStateCompat.Builder()
-                .setActions(PlaybackStateCompat.ACTION_PLAY
-                or PlaybackStateCompat.ACTION_PLAY_PAUSE)
-
-            setPlaybackState(stateBuilder.build())
-
-            setCallback(mSessionCallback)
-
-            setSessionToken(sessionToken)
-        }
-
+        initMediaSession()
         val intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
         registerReceiver(longPressHomeBroadcast, intentFilter)
@@ -96,6 +77,7 @@ class MusicService : MediaBrowserServiceCompat() {
             bundle.putInt(MusicConst.MUSIC_CURRENT_PROGRESS, mMediaPlayer.currentPosition)
             bundle.putInt(MusicConst.MUSIC_MAX_PROGRESS, mMediaPlayer.duration)
             bundle.putBoolean(MusicConst.MUSIC_IS_PLAYING, mMediaPlayer.isPlaying)
+            bundle.putBoolean(MusicConst.HAS_INIT_MUSIC, hasInitMusic)
             //音乐持续时间
             val desc0 = MediaDescriptionCompat.Builder()
                 .setMediaId(0.toString())
@@ -125,12 +107,21 @@ class MusicService : MediaBrowserServiceCompat() {
 
     private val mSessionCallback = object : MediaSessionCompat.Callback(){
 
+        /**
+         * 设置当service第一次启动时要播放的音乐，一般是音乐列表的第一首
+         */
+        override fun onPrepare() {
+            super.onPrepare()
+            initMusic()
+        }
+
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle?) {
             super.onPrepareFromMediaId(mediaId, extras)
             if (mediaId != null) {
                 mMediaPlayer.reset()
-                mMediaPlayer.setDataSource((mMusicList[Integer.valueOf(mediaId)].description.mediaUri).toString())
+                val description = mMusicList[Integer.valueOf(mediaId)].description
+                mMediaPlayer.setDataSource((description.mediaUri).toString())
                 mCurrentMusicMediaId = mediaId
                 mMediaPlayer.prepareAsync()
                 mMediaPlayer.setOnPreparedListener {
@@ -138,6 +129,8 @@ class MusicService : MediaBrowserServiceCompat() {
                     mediaSession?.setMetadata(
                         MediaMetadataCompat.Builder()
                             .putLong(MUSIC_DURATION, mMediaPlayer.duration.toLong())
+                            .putString(MusicConst.MUSIC_TITLE, description.title.toString())
+                            .putString(MusicConst.MUSIC_AUTHOR, description.subtitle.toString())
                             .build()
                     )
                     onPlay()
@@ -232,6 +225,24 @@ class MusicService : MediaBrowserServiceCompat() {
         startForeground(1, builder.build())
     }
 
+    @SuppressLint("RestrictedApi")
+    private fun initMediaSession(){
+        mediaSession = MediaSessionCompat(baseContext, LOG_TAG).apply {
+            setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
+                    or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+
+            stateBuilder = PlaybackStateCompat.Builder()
+                .setActions(PlaybackStateCompat.ACTION_PLAY
+                        or PlaybackStateCompat.ACTION_PLAY_PAUSE)
+
+            setPlaybackState(stateBuilder.build())
+
+            setCallback(mSessionCallback)
+
+            setSessionToken(sessionToken)
+        }
+    }
+
     private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Int.MAX_VALUE)) {
@@ -242,4 +253,32 @@ class MusicService : MediaBrowserServiceCompat() {
         return false
     }
 
+    private fun initMusic(){
+        if (!hasInitMusic) {
+            hasInitMusic = true
+            val description = mMusicList[Integer.valueOf(mCurrentMusicMediaId)].description
+            mMediaPlayer.setDataSource((description.mediaUri).toString())
+            mMediaPlayer.prepareAsync()
+            mMediaPlayer.setOnPreparedListener {
+                mediaSession?.isActive = true
+                mediaSession?.setMetadata(
+                    MediaMetadataCompat.Builder()
+                        .putLong(MUSIC_DURATION, mMediaPlayer.duration.toLong())
+                        .putString(MusicConst.MUSIC_TITLE, description.title.toString())
+                        .putString(MusicConst.MUSIC_AUTHOR, description.subtitle.toString())
+                        .build()
+                )
+            }
+        }else{
+            val description = mMusicList[Integer.valueOf(mCurrentMusicMediaId)].description
+            mediaSession?.isActive = true
+            mediaSession?.setMetadata(
+                MediaMetadataCompat.Builder()
+                    .putLong(MUSIC_DURATION, mMediaPlayer.duration.toLong())
+                    .putString(MusicConst.MUSIC_TITLE, description.title.toString())
+                    .putString(MusicConst.MUSIC_AUTHOR, description.subtitle.toString())
+                    .build()
+            )
+        }
+    }
 }

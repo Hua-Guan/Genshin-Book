@@ -15,6 +15,9 @@ class MusicConst {
         const val MUSIC_CURRENT_PROGRESS = "MUSIC_CURRENT_PROGRESS"
         const val MUSIC_IS_PLAYING = "MUSIC_IS_PLAYING"
         const val MUSIC_SERVICE_NAME = "xyz.genshin.itismyduty.server.MusicService"
+        const val HAS_INIT_MUSIC = "HAS_INIT_MUSIC"
+        const val MUSIC_TITLE = "MUSIC_TITLE"
+        const val MUSIC_AUTHOR = "MUSIC_AUTHOR"
 
     }
 }

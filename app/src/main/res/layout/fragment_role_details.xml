@@ -9,7 +9,6 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#FFFFFFFF"
         android:elevation="4dp" >
 
         <ImageView
@@ -29,6 +28,12 @@
             android:layout_height="40dp"/>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/split_line_width"
+        android:layout_marginTop="56dp"
+        android:background="@color/split_line"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_role"

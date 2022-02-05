@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.adapter.MusicGridAdapter
 import xyz.genshin.itismyduty.model.bean.MusicGridBean
@@ -25,6 +26,8 @@ class MusicFragment: Fragment() {
 
     private var mView: View? = null
     private var mGrid: GridView? = null
+
+    private val mMusicControl = MusicControlFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +47,7 @@ class MusicFragment: Fragment() {
         mView?.let { initView(it) }
         setGridView()
         showMusicList()
+        //setMusicControlFragment()
     }
 
     private fun initView(mView: View){
@@ -75,6 +79,13 @@ class MusicFragment: Fragment() {
             startActivity(intent)
         }
 
+    }
+
+    private fun setMusicControlFragment(){
+        childFragmentManager.commit {
+            setReorderingAllowed(true)
+            add(R.id.container_view, mMusicControl)
+        }
     }
 
 }
