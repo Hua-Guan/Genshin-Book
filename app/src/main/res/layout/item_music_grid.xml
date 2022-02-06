@@ -9,6 +9,7 @@
         android:layout_width="128dp"
         android:layout_height="72dp"
         android:scaleType="fitXY"
+        android:background="@drawable/fillet"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

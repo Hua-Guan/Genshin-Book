@@ -8,6 +8,7 @@
         android:id="@+id/image_music"
         android:layout_width="64dp"
         android:layout_height="36dp"
+        android:background="@drawable/fillet"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

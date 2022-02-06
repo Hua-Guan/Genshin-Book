@@ -46,6 +46,7 @@ class OverviewGridViewAdapter constructor(
             Glide.with(view)
                 .load(list[position].imageUri)
                 .into(holder.image)
+            holder.image.clipToOutline = true
             holder.typeName.text = list.get(position).typeName
             view?.tag = holder
         }else{

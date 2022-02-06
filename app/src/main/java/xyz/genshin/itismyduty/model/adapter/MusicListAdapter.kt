@@ -40,6 +40,8 @@ class MusicListAdapter(private var context: Context,
                 .load(list[position].mMusicImageUri)
                 .into(holder.mMusicImage)
 
+            holder.mMusicImage.clipToOutline = true
+
             holder.mMusicName.text = list[position].mMusicName
             holder.mMusicAuthor.text = list[position].mMusicAuthor
 
