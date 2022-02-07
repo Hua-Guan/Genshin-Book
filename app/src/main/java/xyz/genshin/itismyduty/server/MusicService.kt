@@ -2,10 +2,13 @@ package xyz.genshin.itismyduty.server
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.BitmapFactory
 import android.media.MediaPlayer
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,11 +17,15 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.PackageManagerCompat.LOG_TAG
 import androidx.media.MediaBrowserServiceCompat
+import androidx.media.session.MediaButtonReceiver
+import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.broadcast.LongPressHomeBroadcastReceiver
+import xyz.genshin.itismyduty.model.broadcast.MusicNotificationReceiver
 import java.util.*
 
 
@@ -40,6 +47,7 @@ class MusicService : MediaBrowserServiceCompat() {
     private val mMediaPlayer = MediaPlayer()
     private var hasInitMusic = false
     private val longPressHomeBroadcast = LongPressHomeBroadcastReceiver()
+    private val musicBroadcast = MusicNotificationReceiver()
 
     @SuppressLint("RestrictedApi")
     override fun onCreate() {
@@ -48,11 +56,13 @@ class MusicService : MediaBrowserServiceCompat() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
         registerReceiver(longPressHomeBroadcast, intentFilter)
+        registerMusicBroadcast()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(longPressHomeBroadcast)
+        unregisterReceiver(musicBroadcast)
     }
 
     override fun onGetRoot(
@@ -149,7 +159,8 @@ class MusicService : MediaBrowserServiceCompat() {
             if (!isServiceRunning){
                 //启动服务
                 startForegroundService(Intent(this@MusicService, MusicService::class.java))
-                setNotification()
+                //setNotification()
+                createNotification(this@MusicService, "1")
                 isServiceRunning = true
             }
         }
@@ -221,6 +232,7 @@ class MusicService : MediaBrowserServiceCompat() {
         builder.setContentTitle("33")
         builder.setContentIntent(mediaSession?.controller?.sessionActivity)
         builder.setAutoCancel(true)
+        builder.setContentIntent(mediaSession?.controller?.sessionActivity)
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         startForeground(1, builder.build())
     }
@@ -280,5 +292,46 @@ class MusicService : MediaBrowserServiceCompat() {
                     .build()
             )
         }
+    }
+
+    @SuppressLint("RemoteViewLayout", "UnspecifiedImmutableFlag")
+    private fun createNotification(context: Context, channelId: String){
+        val controller = mediaSession?.controller
+        val metadata = controller?.metadata
+        val intent = Intent(this, MusicNotificationReceiver::class.java).apply {
+            action = "TEST22"
+        }
+        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val notificationLayout = RemoteViews(packageName, R.layout.notification_control)
+        notificationLayout.setOnClickPendingIntent(R.id.img_play, pendingIntent)
+        val builder = NotificationCompat.Builder(context, channelId).apply {
+            priority = NotificationCompat.PRIORITY_DEFAULT
+            setSmallIcon(R.mipmap.ic_launcher)
+            //color = ContextCompat.getColor(context, R.color.test)
+            setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_music_yellow))
+            if (controller != null) {
+                setContentIntent(controller.sessionActivity)
+            }
+            setDeleteIntent(
+                MediaButtonReceiver.buildMediaButtonPendingIntent(
+                    context,
+                    PlaybackStateCompat.ACTION_STOP
+                )
+            )
+            setOngoing(true)
+
+            // Make the transport controls visible on the lockscreen
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            setCustomContentView(notificationLayout)
+        }
+        startForeground(1, builder.build())
+    }
+
+    private fun registerMusicBroadcast(){
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
+            addAction("TEST22")
+        }
+        registerReceiver(musicBroadcast, filter)
     }
 }

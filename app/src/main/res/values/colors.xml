@@ -12,4 +12,5 @@
     <color name="split_line">#d8d8d8</color>
     <color name="text_yellow">#f4ea2a</color>
     <color name="text_default">#8A000000</color>
+    <color name="test">#00000000</color>
 </resources>
