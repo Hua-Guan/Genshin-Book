@@ -52,17 +52,9 @@
             android:name=".server.MusicService"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService"/>
+                <action android:name="android.media.browse.MediaBrowserServiceCompat"/>
             </intent-filter>
         </service>
-        <receiver
-            android:name=".model.broadcast.MusicNotificationReceiver"
-            android:exported="true"
-            android:process=":player">
-            <intent-filter>
-                <action android:name="TEST22" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

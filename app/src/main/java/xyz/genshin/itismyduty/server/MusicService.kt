@@ -1,14 +1,15 @@
 package xyz.genshin.itismyduty.server
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
+import android.app.Notification.CATEGORY_MESSAGE
+import android.app.Notification.DEFAULT_ALL
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.media.MediaPlayer
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -23,21 +24,27 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.PackageManagerCompat.LOG_TAG
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.broadcast.LongPressHomeBroadcastReceiver
 import xyz.genshin.itismyduty.model.broadcast.MusicNotificationReceiver
-import java.util.*
 
 
 class MusicService : MediaBrowserServiceCompat() {
 
     companion object{
+        const val TEST_URI = "https://genshin.itismyduty.xyz/music.jpg"
         private const val MY_MEDIA_ROOT_ID = "genshin_music"
         private const val PACKAGE_NAME = "xyz.genshin.itismyduty"
         private const val MUSIC_DURATION = "music_duration"
     }
 
-    private var mediaSession: MediaSessionCompat? =null
     private var isServiceRunning = false
     private lateinit var mMusicList : ArrayList<MediaBrowserCompat.MediaItem>
     private var mMusicUri = "https://genshin.itismyduty.xyz/Music/Beckoning.mp3"
@@ -47,7 +54,20 @@ class MusicService : MediaBrowserServiceCompat() {
     private val mMediaPlayer = MediaPlayer()
     private var hasInitMusic = false
     private val longPressHomeBroadcast = LongPressHomeBroadcastReceiver()
-    private val musicBroadcast = MusicNotificationReceiver()
+    private lateinit var mMusicNotificationReceiver: MusicNotificationReceiver
+    private var mediaSession: MediaSessionCompat? =null
+
+    //记录当前播放的音乐的标题和图片
+    private var mCurrentMusicTitle = "Beckoning"
+    private var mCurrentMusicImage = ""
+    //记录当前播放的音乐的作者
+    private var mCurrentMusicSubtitle = ""
+    //音乐通知的view
+    private var notificationLayout: RemoteViews? = null
+    //通知构建器
+    private var builder: NotificationCompat.Builder? = null
+    //通知管理器
+    private var notificationManager: NotificationManager? = null
 
     @SuppressLint("RestrictedApi")
     override fun onCreate() {
@@ -56,13 +76,12 @@ class MusicService : MediaBrowserServiceCompat() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
         registerReceiver(longPressHomeBroadcast, intentFilter)
-        registerMusicBroadcast()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(longPressHomeBroadcast)
-        unregisterReceiver(musicBroadcast)
+        unregisterReceiver(mMusicNotificationReceiver)
     }
 
     override fun onGetRoot(
@@ -131,20 +150,42 @@ class MusicService : MediaBrowserServiceCompat() {
             if (mediaId != null) {
                 mMediaPlayer.reset()
                 val description = mMusicList[Integer.valueOf(mediaId)].description
+                //更新当前音乐的标题和作者在全局变量中
+                mCurrentMusicTitle = description.title.toString()
+                mCurrentMusicSubtitle = description.subtitle.toString()
+                //加载音乐资源
                 mMediaPlayer.setDataSource((description.mediaUri).toString())
                 mCurrentMusicMediaId = mediaId
                 mMediaPlayer.prepareAsync()
                 mMediaPlayer.setOnPreparedListener {
+                    //更新当前音乐的标题和作者在音乐控制器中
                     mediaSession?.isActive = true
                     mediaSession?.setMetadata(
                         MediaMetadataCompat.Builder()
                             .putLong(MUSIC_DURATION, mMediaPlayer.duration.toLong())
-                            .putString(MusicConst.MUSIC_TITLE, description.title.toString())
-                            .putString(MusicConst.MUSIC_AUTHOR, description.subtitle.toString())
+                            .putString(MusicConst.MUSIC_TITLE, mCurrentMusicTitle)
+                            .putString(MusicConst.MUSIC_AUTHOR, mCurrentMusicSubtitle)
                             .build()
                     )
+                    //更新当前音乐的标题和作者在通知中的音乐控制器中
+                    notificationLayout?.setTextViewText(R.id.text_music_title, mCurrentMusicTitle)
+                    notificationManager?.notify(1, builder?.build())
                     onPlay()
                 }
+                //设置通知中的音乐控制器的音乐logo
+                val load = Glide.with(applicationContext)
+                    .asBitmap()
+                    .load(TEST_URI)
+                    .into(object : SimpleTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            notificationLayout?.setImageViewBitmap(R.id.img_music_logo, resource)
+                            notificationManager?.notify(1, builder?.build())
+                        }
+
+                    })
             }
         }
 
@@ -159,7 +200,6 @@ class MusicService : MediaBrowserServiceCompat() {
             if (!isServiceRunning){
                 //启动服务
                 startForegroundService(Intent(this@MusicService, MusicService::class.java))
-                //setNotification()
                 createNotification(this@MusicService, "1")
                 isServiceRunning = true
             }
@@ -172,9 +212,15 @@ class MusicService : MediaBrowserServiceCompat() {
             if (mMediaPlayer.isPlaying) {
                 mMediaPlayer.pause()
                 setPauseState()
+                //更新通知播放图标
+                notificationLayout?.setImageViewResource(R.id.img_play, R.drawable.ic_play)
             }else {
                 onPlay()
+                //更新通知播放图标
+                notificationLayout?.setImageViewResource(R.id.img_play, R.drawable.ic_pause)
             }
+            //更新通知
+            notificationManager?.notify(1, builder?.build())
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -197,6 +243,9 @@ class MusicService : MediaBrowserServiceCompat() {
             }else {
                 onPrepareFromMediaId("0", null)
             }
+            //设置当前播放音乐的标题
+            notificationLayout!!.setTextViewText(R.id.text_music_title, mCurrentMusicTitle)
+            notificationManager?.notify(1, builder?.build())
         }
     }
     private fun setPlayState(){
@@ -226,17 +275,6 @@ class MusicService : MediaBrowserServiceCompat() {
         mediaSession?.setPlaybackState(stateBuilder.build())
     }
 
-    private fun setNotification(){
-        //通知
-        val builder = NotificationCompat.Builder(this@MusicService, "1")
-        builder.setContentTitle("33")
-        builder.setContentIntent(mediaSession?.controller?.sessionActivity)
-        builder.setAutoCancel(true)
-        builder.setContentIntent(mediaSession?.controller?.sessionActivity)
-        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-        startForeground(1, builder.build())
-    }
-
     @SuppressLint("RestrictedApi")
     private fun initMediaSession(){
         mediaSession = MediaSessionCompat(baseContext, LOG_TAG).apply {
@@ -255,17 +293,8 @@ class MusicService : MediaBrowserServiceCompat() {
         }
     }
 
-    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
-        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-            if (serviceClass.name == service.service.className) {
-                return true
-            }
-        }
-        return false
-    }
-
     private fun initMusic(){
+        //设置音乐控制器的元数据
         if (!hasInitMusic) {
             hasInitMusic = true
             val description = mMusicList[Integer.valueOf(mCurrentMusicMediaId)].description
@@ -298,17 +327,22 @@ class MusicService : MediaBrowserServiceCompat() {
     private fun createNotification(context: Context, channelId: String){
         val controller = mediaSession?.controller
         val metadata = controller?.metadata
-        val intent = Intent(this, MusicNotificationReceiver::class.java).apply {
-            action = "TEST22"
-        }
-        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val notificationLayout = RemoteViews(packageName, R.layout.notification_control)
-        notificationLayout.setOnClickPendingIntent(R.id.img_play, pendingIntent)
-        val builder = NotificationCompat.Builder(context, channelId).apply {
-            priority = NotificationCompat.PRIORITY_DEFAULT
+        //设置当用户按通知中的控制器时的监听
+        val playIntent = Intent(MusicConst.STATE_PLAY)
+        val pauseIntent = Intent(MusicConst.STATE_NEXT)
+        val playPendingIntent = PendingIntent.getBroadcast(this, 0, playIntent, 0)
+        val pausePendingIntent = PendingIntent.getBroadcast(this, 0, pauseIntent, 0)
+        notificationLayout = RemoteViews(packageName, R.layout.notification_control)
+        notificationLayout!!.setOnClickPendingIntent(R.id.img_play, playPendingIntent)
+        notificationLayout!!.setOnClickPendingIntent(R.id.img_next, pausePendingIntent)
+        //构建通知
+        builder = NotificationCompat.Builder(context, channelId).apply {
+            priority = NotificationCompat.PRIORITY_MAX
             setSmallIcon(R.mipmap.ic_launcher)
-            //color = ContextCompat.getColor(context, R.color.test)
-            setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_music_yellow))
+            setCategory(CATEGORY_MESSAGE)
+            setDefaults(DEFAULT_ALL)
+            setSound(null)//关闭通知提示音
+            setVibrate(null)//关闭震动
             if (controller != null) {
                 setContentIntent(controller.sessionActivity)
             }
@@ -319,19 +353,33 @@ class MusicService : MediaBrowserServiceCompat() {
                 )
             )
             setOngoing(true)
-
-            // Make the transport controls visible on the lockscreen
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            setCustomContentView(notificationLayout)
+            setContent(notificationLayout)
         }
-        startForeground(1, builder.build())
-    }
+        //设置当前的播放状态
+        notificationLayout!!.setImageViewResource(R.id.img_play, R.drawable.ic_pause)
+        //设置当前播放音乐的标题
+        notificationLayout!!.setTextViewText(R.id.text_music_title, mCurrentMusicTitle)
+        //设置音乐通知的广播接收器
+        val musicNotificationIntentFilter = IntentFilter()
+        musicNotificationIntentFilter.addAction(MusicConst.STATE_PLAY)
+        musicNotificationIntentFilter.addAction(MusicConst.STATE_NEXT)
+        mMusicNotificationReceiver = MusicNotificationReceiver()
+        mMusicNotificationReceiver.setMusicNotificationListener(object : MusicNotificationReceiver.MusicNotificationListener{
+            override fun onClickNotificationPlayOrPause() {
+                //更新播放状态
+                controller?.transportControls?.pause()
+            }
 
-    private fun registerMusicBroadcast(){
-        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
-            addAction("TEST22")
-        }
-        registerReceiver(musicBroadcast, filter)
+            override fun onClickNotificationNext() {
+                mediaSession?.controller?.transportControls?.skipToNext()
+            }
+
+        })
+        registerReceiver(mMusicNotificationReceiver, musicNotificationIntentFilter)
+        //启动服务
+        startForeground(1, builder!!.build())
+        //获取通知管理器
+        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     }
 }
