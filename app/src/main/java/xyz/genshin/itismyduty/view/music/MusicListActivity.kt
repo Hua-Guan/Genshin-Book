@@ -41,15 +41,25 @@ class MusicListActivity: AppCompatActivity() {
 
     private var mListView: ListView? =null
     private lateinit var mMusicList : MutableList<MediaBrowserCompat.MediaItem>
+    //暂停或播放
     private lateinit var mPlayMusic: ImageView
+    //下一首
     private lateinit var mMusicNext: ImageView
+    //上一首
+    private lateinit var mMusicPre: ImageView
+    //音乐logo
     private lateinit var mMusicImage: ImageView
+    //音乐标题
     private lateinit var mMusicTitle: TextView
+    //音乐作者
     private lateinit var mMusicAuthor: TextView
+    //当前播放时间
     private lateinit var mMusicTime: TextView
+    //总播放时间
     private lateinit var mMusicAllTime: TextView
     private lateinit var mMusicClient: MediaBrowserCompat
     private lateinit var mMusicController: MediaControllerCompat
+    //进度条
     private lateinit var mMusicSeekBar: SeekBar
     private var mProgressAnimator = ValueAnimator.ofInt(0, 1000)
     private var mCurrentMusicId = 0
@@ -90,6 +100,8 @@ class MusicListActivity: AppCompatActivity() {
                     setSeekBarAnimation(state.position.toInt())
                 }else if (state.state == PlaybackStateCompat.STATE_SKIPPING_TO_NEXT){
                     mProgressAnimator.cancel()
+                }else if (state.state == PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS){
+                    mProgressAnimator.cancel()
                 }
             }
         }
@@ -122,6 +134,7 @@ class MusicListActivity: AppCompatActivity() {
         mListView = findViewById(R.id.music_list)
         mPlayMusic = findViewById(R.id.music_play_or_pause)
         mMusicNext = findViewById(R.id.music_next)
+        mMusicPre = findViewById(R.id.music_pre)
         mMusicImage = findViewById(R.id.image_music)
         mMusicTitle = findViewById(R.id.music_title)
         mMusicAuthor = findViewById(R.id.music_author)
@@ -166,6 +179,7 @@ class MusicListActivity: AppCompatActivity() {
     private fun buildTransportControls(){
         setPlayControl()
         setNextControl()
+        setPreControl()
         setSeekBarControl()
         setListViewControl()
         mMusicController.registerCallback(controllerCallback)
@@ -188,6 +202,12 @@ class MusicListActivity: AppCompatActivity() {
     private fun setNextControl(){
         mMusicNext.setOnClickListener {
             mMusicController.transportControls.skipToNext()
+        }
+    }
+
+    private fun setPreControl(){
+        mMusicPre.setOnClickListener {
+            mMusicController.transportControls.skipToPrevious()
         }
     }
 
@@ -284,7 +304,6 @@ class MusicListActivity: AppCompatActivity() {
     private fun initMusic(){
         mMusicController.transportControls.prepare()
     }
-
     private fun setSeekBarProgress(progress: Int){
         mMusicSeekBar.progress = progress
     }
@@ -314,4 +333,3 @@ class MusicListActivity: AppCompatActivity() {
         mProgressAnimator.start()
     }
 }
-

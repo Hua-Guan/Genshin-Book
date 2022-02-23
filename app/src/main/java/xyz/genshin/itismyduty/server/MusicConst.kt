@@ -11,6 +11,7 @@ class MusicConst {
         const val STATE_PLAY = "PLAY"
         const val STATE_PAUSE = "PAUSE"
         const val STATE_NEXT = "NEXT"
+        const val STATE_PRE = "PRE"
         const val MUSIC_STATE = "STATE"
         const val MUSIC_MAX_PROGRESS = "MAX_PROGRESS"
         const val MUSIC_CURRENT_PROGRESS = "MUSIC_CURRENT_PROGRESS"

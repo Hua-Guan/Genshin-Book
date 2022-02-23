@@ -1,11 +1,9 @@
 package xyz.genshin.itismyduty.view.home
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -13,19 +11,10 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
-import androidx.media.MediaBrowserServiceCompat
-import androidx.viewpager2.widget.ViewPager2
 import xyz.genshin.itismyduty.R
 
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
-import xyz.genshin.itismyduty.model.adapter.MainTabPagerViewAdapter
-import xyz.genshin.itismyduty.server.MusicService
-import xyz.genshin.itismyduty.server.MyService
-import xyz.genshin.itismyduty.utils.Tools
 import xyz.genshin.itismyduty.view.me.MeFragment
 import xyz.genshin.itismyduty.view.music.MusicFragment
 
@@ -35,22 +24,10 @@ import xyz.genshin.itismyduty.view.music.MusicFragment
  */
 class MainActivity : AppCompatActivity() {
 
-    companion object{
-
-        const val TAB_HOME = "主页"
-        const val TAB_HOME_POSITION = 0
-        const val TAB_MUSIC = "音乐"
-        const val TAB_MUSIC_POSITION = 1
-        const val TAB_ME = "我"
-        const val TAB_ME_POSITION = 2
-
-    }
-
-    val home = HomeFragment()
-    val music = MusicFragment()
+    private val home = HomeFragment()
+    private val music = MusicFragment()
     val me = MeFragment()
 
-    private lateinit var fragmentContainer: FragmentContainerView
     private lateinit var imageHome: ImageView
     private lateinit var imageMusic: ImageView
     private lateinit var imageMe: ImageView

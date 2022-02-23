@@ -46,11 +46,14 @@ class MusicService : MediaBrowserServiceCompat() {
     }
 
     private var isServiceRunning = false
+    //音乐播放列表
     private lateinit var mMusicList : ArrayList<MediaBrowserCompat.MediaItem>
     private var mMusicUri = "https://genshin.itismyduty.xyz/Music/Beckoning.mp3"
     private var mMusicUri1 = "https://genshin.itismyduty.xyz/Music/BeginsTheJourney.mp3"
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
+    //当前播放的音乐id
     private var mCurrentMusicMediaId = "0"
+    //播放器
     private val mMediaPlayer = MediaPlayer()
     private var hasInitMusic = false
     private val longPressHomeBroadcast = LongPressHomeBroadcastReceiver()
@@ -244,8 +247,28 @@ class MusicService : MediaBrowserServiceCompat() {
                 onPrepareFromMediaId("0", null)
             }
             //设置当前播放音乐的标题
-            notificationLayout!!.setTextViewText(R.id.text_music_title, mCurrentMusicTitle)
-            notificationManager?.notify(1, builder?.build())
+            if (notificationLayout != null) {
+                notificationLayout!!.setTextViewText(R.id.text_music_title, mCurrentMusicTitle)
+                notificationManager?.notify(1, builder?.build())
+            }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onSkipToPrevious() {
+            super.onSkipToPrevious()
+            setSkipToPreState()
+            var valueOf = Integer.valueOf(mCurrentMusicMediaId)
+            if (valueOf > 0){
+                valueOf --
+                onPrepareFromMediaId(valueOf.toString(), null)
+            }else {
+                onPrepareFromMediaId((mMusicList.size - 1).toString(), null)
+            }
+            //设置当前播放音乐的标题
+            if (notificationLayout != null) {
+                notificationLayout!!.setTextViewText(R.id.text_music_title, mCurrentMusicTitle)
+                notificationManager?.notify(1, builder?.build())
+            }
         }
     }
     private fun setPlayState(){
@@ -270,6 +293,14 @@ class MusicService : MediaBrowserServiceCompat() {
     private fun setSkipToNextState(){
         stateBuilder = PlaybackStateCompat.Builder()
             .setState(PlaybackStateCompat.STATE_SKIPPING_TO_NEXT, 0,
+                1f
+            )
+        mediaSession?.setPlaybackState(stateBuilder.build())
+    }
+
+    private fun setSkipToPreState(){
+        stateBuilder = PlaybackStateCompat.Builder()
+            .setState(PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS, 0,
                 1f
             )
         mediaSession?.setPlaybackState(stateBuilder.build())
@@ -326,15 +357,17 @@ class MusicService : MediaBrowserServiceCompat() {
     @SuppressLint("RemoteViewLayout", "UnspecifiedImmutableFlag")
     private fun createNotification(context: Context, channelId: String){
         val controller = mediaSession?.controller
-        val metadata = controller?.metadata
         //设置当用户按通知中的控制器时的监听
         val playIntent = Intent(MusicConst.STATE_PLAY)
-        val pauseIntent = Intent(MusicConst.STATE_NEXT)
+        val nextIntent = Intent(MusicConst.STATE_NEXT)
+        val preIntent = Intent(MusicConst.STATE_PRE)
         val playPendingIntent = PendingIntent.getBroadcast(this, 0, playIntent, 0)
-        val pausePendingIntent = PendingIntent.getBroadcast(this, 0, pauseIntent, 0)
+        val pausePendingIntent = PendingIntent.getBroadcast(this, 0, nextIntent, 0)
+        val prePendingIntent = PendingIntent.getBroadcast(this, 0, preIntent, 0)
         notificationLayout = RemoteViews(packageName, R.layout.notification_control)
         notificationLayout!!.setOnClickPendingIntent(R.id.img_play, playPendingIntent)
         notificationLayout!!.setOnClickPendingIntent(R.id.img_next, pausePendingIntent)
+        notificationLayout!!.setOnClickPendingIntent(R.id.img_pre, prePendingIntent)
         //构建通知
         builder = NotificationCompat.Builder(context, channelId).apply {
             priority = NotificationCompat.PRIORITY_MAX
@@ -364,6 +397,7 @@ class MusicService : MediaBrowserServiceCompat() {
         val musicNotificationIntentFilter = IntentFilter()
         musicNotificationIntentFilter.addAction(MusicConst.STATE_PLAY)
         musicNotificationIntentFilter.addAction(MusicConst.STATE_NEXT)
+        musicNotificationIntentFilter.addAction(MusicConst.STATE_PRE)
         mMusicNotificationReceiver = MusicNotificationReceiver()
         mMusicNotificationReceiver.setMusicNotificationListener(object : MusicNotificationReceiver.MusicNotificationListener{
             override fun onClickNotificationPlayOrPause() {
@@ -372,7 +406,11 @@ class MusicService : MediaBrowserServiceCompat() {
             }
 
             override fun onClickNotificationNext() {
-                mediaSession?.controller?.transportControls?.skipToNext()
+                controller?.transportControls?.skipToNext()
+            }
+
+            override fun onClickNotificationPre() {
+                controller?.transportControls?.skipToPrevious()
             }
 
         })

@@ -17,6 +17,8 @@ class MusicNotificationReceiver(): BroadcastReceiver() {
             mMusicNotificationListener.onClickNotificationPlayOrPause()
         }else if (action.equals(MusicConst.STATE_NEXT)){
             mMusicNotificationListener.onClickNotificationNext()
+        }else if (action.equals(MusicConst.STATE_PRE)){
+            mMusicNotificationListener.onClickNotificationPre()
         }
     }
 
@@ -27,6 +29,7 @@ class MusicNotificationReceiver(): BroadcastReceiver() {
     interface MusicNotificationListener{
         fun onClickNotificationPlayOrPause()
         fun onClickNotificationNext()
+        fun onClickNotificationPre()
     }
 
 }
