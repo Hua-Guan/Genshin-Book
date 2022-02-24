@@ -8,12 +8,11 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import xyz.genshin.itismyduty.R
-import xyz.genshin.itismyduty.model.bean.MusicGridBean
+import xyz.genshin.itismyduty.model.bean.MusicAlbumGridBean
 
 class MusicGridAdapter(private val context: Context,
-                        private val list: List<MusicGridBean>): BaseAdapter() {
+                        private val list: List<MusicAlbumGridBean>): BaseAdapter() {
     override fun getCount(): Int {
         return list.size
     }
@@ -46,13 +45,13 @@ class MusicGridAdapter(private val context: Context,
 //                .into(holder.mMusicImage)
 
             Glide.with(mView)
-                .load(list[position].mMusicImageUri)
+                .load(list[position].albumCover)
                 .into(holder.mMusicImage)
 
             holder.mMusicImage.clipToOutline = true
 
-            holder.mMusicName.text = list[position].mMusicName
-            holder.mMusicAuthor.text = list[position].mMusicAuthor
+            holder.mMusicName.text = list[position].albumName
+            holder.mMusicAuthor.text = list[position].albumAuthor
 
             mView.tag = holder
 
@@ -60,11 +59,11 @@ class MusicGridAdapter(private val context: Context,
             val holder = mView.tag as Holder
 
             Glide.with(mView)
-                .load(list[position].mMusicImageUri)
+                .load(list[position].albumCover)
                 .into(holder.mMusicImage)
 
-            holder.mMusicName.text = list[position].mMusicName
-            holder.mMusicAuthor.text = list[position].mMusicAuthor
+            holder.mMusicName.text = list[position].albumName
+            holder.mMusicAuthor.text = list[position].albumAuthor
         }
         return mView
     }

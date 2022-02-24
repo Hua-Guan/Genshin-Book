@@ -84,7 +84,9 @@ class MusicService : MediaBrowserServiceCompat() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(longPressHomeBroadcast)
-        unregisterReceiver(mMusicNotificationReceiver)
+        if (isServiceRunning) {
+            unregisterReceiver(mMusicNotificationReceiver)
+        }
     }
 
     override fun onGetRoot(

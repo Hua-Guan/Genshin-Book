@@ -6,15 +6,13 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentContainerView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import xyz.genshin.itismyduty.R
-
 import xyz.genshin.itismyduty.view.me.MeFragment
 import xyz.genshin.itismyduty.view.music.MusicFragment
 
