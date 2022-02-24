@@ -2,6 +2,8 @@ package xyz.genshin.itismyduty.view.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +34,7 @@ class HomeFragment: Fragment() {
 
     private var mView: View? = null
     private var overview: GridView? = null
+    private val mHandle = Handler(Looper.myLooper()!!)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,11 +73,8 @@ class HomeFragment: Fragment() {
                     startActivity(intent)
 
                 }
-
             }
-
         }
-
     }
 
     private fun setImageFromServer() {
@@ -83,30 +83,17 @@ class HomeFragment: Fragment() {
             Request.Method.GET,
             "http://genshin.itismyduty.xyz:8080/GenshinBook?request=getOverviewImageUri",
             { response ->
-                val jsonArray = JsonParser.parseString(response).asJsonArray
-                val overviewRoleBean = OverviewBean()
-                var overviewBean = Gson().fromJson(jsonArray[1], OverviewBean::class.java)
-                overviewRoleBean.imageUri =
-                    "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
-                overviewRoleBean.typeName = "角色"
-
-                val overviewEnemyBean = OverviewBean()
-                overviewBean = Gson().fromJson(jsonArray[0], OverviewBean::class.java)
-                overviewEnemyBean.imageUri =
-                    "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
-                overviewEnemyBean.typeName = "敌人"
-
-                val overviewOstBean = OverviewBean()
-                overviewOstBean.imageUri = "https://genshin.itismyduty.xyz/" + overviewBean.imageUri
-                overviewOstBean.typeName = "OST"
-
                 val list = ArrayList<OverviewBean>()
-                list.add(overviewRoleBean)
-                list.add(overviewEnemyBean)
-                list.add(overviewOstBean)
-
-                val adapter = context?.let { OverviewGridViewAdapter(it, list) }
-                overview?.adapter = adapter
+                val jsonArray = JsonParser.parseString(response).asJsonArray
+                println(jsonArray)
+                for (item in jsonArray){
+                    val bean = Gson().fromJson(item, OverviewBean::class.java)
+                    list.add(bean)
+                }
+                mHandle.post {
+                    val adapter = context?.let { OverviewGridViewAdapter(it, list) }
+                    overview?.adapter = adapter
+                }
             }, { })
         context?.let { VolleyInstance.getInstance(it.applicationContext).addToRequestQueue(stringRequest) }
     }

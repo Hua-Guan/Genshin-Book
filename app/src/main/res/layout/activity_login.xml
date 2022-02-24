@@ -6,6 +6,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="xyz.genshin.itismyduty.view.me.LoginActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="160dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="原神图鉴"
+            android:textSize="24dp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/split_line_width"
+        android:layout_marginTop="56dp"
+        android:background="@color/split_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/account"
         android:layout_width="64dp"
@@ -15,7 +44,7 @@
         android:gravity="center"
         android:text="账号"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +67,7 @@
         android:gravity="center"
         android:text="密码"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_16dp"
         app:layout_constraintStart_toStartOf="@+id/account"
         app:layout_constraintTop_toBottomOf="@+id/account" />
 
@@ -58,6 +87,7 @@
         android:layout_width="80dp"
         android:layout_height="32dp"
         android:text="快速注册"
+        android:textSize="@dimen/text_size_14dp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="@+id/password"
         app:layout_constraintTop_toBottomOf="@+id/password" />
@@ -68,6 +98,7 @@
         android:layout_height="32dp"
         android:text="忘记密码"
         android:gravity="center"
+        android:textSize="@dimen/text_size_14dp"
         app:layout_constraintEnd_toEndOf="@+id/edit_password"
         app:layout_constraintTop_toBottomOf="@+id/edit_password" />
 
@@ -77,6 +108,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
         android:text="登入"
+        android:textSize="@dimen/text_size_12dp"
         app:layout_constraintEnd_toEndOf="@+id/forget_password"
         app:layout_constraintStart_toStartOf="@+id/quick_register"
         app:layout_constraintTop_toBottomOf="@+id/quick_register" />

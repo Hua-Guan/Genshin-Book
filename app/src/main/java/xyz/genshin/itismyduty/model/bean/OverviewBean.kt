@@ -6,6 +6,6 @@ package xyz.genshin.itismyduty.model.bean
 class OverviewBean {
 
      var imageUri: String = ""
-     var typeName: String = ""
+     var styleName: String = ""
 
 }

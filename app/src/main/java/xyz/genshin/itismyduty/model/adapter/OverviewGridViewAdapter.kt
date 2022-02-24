@@ -47,7 +47,7 @@ class OverviewGridViewAdapter constructor(
                 .load(list[position].imageUri)
                 .into(holder.image)
             holder.image.clipToOutline = true
-            holder.typeName.text = list.get(position).typeName
+            holder.typeName.text = list.get(position).styleName
             view?.tag = holder
         }else{
 
