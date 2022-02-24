@@ -23,9 +23,14 @@ class MeFragment: Fragment() {
         const val HISTORY_BEAN_ITEM_NAME = "最近浏览"
         const val FAVORITE_BEAN_ITEM_NAME = "我的收藏"
 
+        const val HISTORY = "0"
+        const val FAVORITE = "1"
+
     }
 
     private var mView: View? = null
+    //列表
+    var meListView: ListView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,22 +48,32 @@ class MeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setLoginOrRegister(view)
+        initView()
+        setLoginOrRegister()
 
-        setMeListView(view)
+        setMeListView()
+        setOnClickListener()
+
+
     }
 
-    private fun setLoginOrRegister(mView: View){
+    /**
+     * 初始化View
+     */
+    private fun initView(){
+        meListView = mView?.findViewById(R.id.me_list)
+    }
 
-        var loginOrRegister = mView.findViewById<Button>(R.id.login_or_register)
-        loginOrRegister.setOnClickListener {
+    private fun setLoginOrRegister() {
+
+        mView?.findViewById<Button>(R.id.login_or_register)?.setOnClickListener {
 
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
         }
     }
 
-    private fun setMeListView(mView: View){
+    private fun setMeListView(){
 
         val list = ArrayList<MeListBean>()
 
@@ -74,10 +89,21 @@ class MeFragment: Fragment() {
         favoriteBean.itemGo = R.drawable.ic_to_right
         list.add(favoriteBean)
 
-        val meListView = mView.findViewById<ListView>(R.id.me_list)
         val adapter = context?.let { MeListAdapter(it, list) }
-        meListView.adapter = adapter
+        meListView?.adapter = adapter
 
+    }
+
+    private fun setOnClickListener(){
+        meListView?.setOnItemClickListener { parent, view, position, id ->
+            if (HISTORY == id.toString()){
+                val intent = Intent(activity, HistoryActivity::class.java)
+                startActivity(intent)
+            }else if (FAVORITE == id.toString()){
+                val intent = Intent(activity, FavoriteActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
 }

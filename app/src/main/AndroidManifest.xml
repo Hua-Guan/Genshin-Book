@@ -37,6 +37,12 @@
         <activity android:name=".view.music.MusicListActivity"
             android:exported="false"
             android:launchMode="singleTop"/>
+        <activity android:name=".view.me.FavoriteActivity"
+            android:exported="false"
+            android:launchMode="singleTop"/>
+        <activity android:name=".view.me.HistoryActivity"
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".view.home.MainActivity"
             android:exported="true"
