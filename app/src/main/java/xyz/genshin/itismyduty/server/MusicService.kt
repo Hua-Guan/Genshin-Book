@@ -24,6 +24,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.PackageManagerCompat.LOG_TAG
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -31,9 +33,13 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import xyz.genshin.itismyduty.R
+import xyz.genshin.itismyduty.model.bean.MusicBean
 import xyz.genshin.itismyduty.model.broadcast.LongPressHomeBroadcastReceiver
 import xyz.genshin.itismyduty.model.broadcast.MusicNotificationReceiver
+import xyz.genshin.itismyduty.utils.VolleyInstance
 
 
 class MusicService : MediaBrowserServiceCompat() {
@@ -107,11 +113,33 @@ class MusicService : MediaBrowserServiceCompat() {
     ) {
         if (parentId == MusicConst.CITY_OF_WINDS_AND_IDYLLS){
             mMusicList = ArrayList()
+            val stringRequest: StringRequest = object : StringRequest(
+                Method.POST, "http://genshin.itismyduty.xyz:8080/GenshinBook/musicbean",
+                Response.Listener { response ->
+                    val string = String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8)
+                    val jsonArray = JsonParser.parseString(string).asJsonArray
+                    for (item in jsonArray){
+                        val bean = Gson().fromJson(item, MusicBean::class.java)
+                        //mList.add(bean)
+                    }
+                },
+                Response.ErrorListener {
+                }) {
+                override fun getParams(): Map<String, String> {
+                    val map: MutableMap<String, String> = HashMap()
+                    map["request"] = "getMusicBean"
+                    map["musicAlbum"] = parentId
+                    return map
+                }
+            }
+            VolleyInstance.getInstance(applicationContext).addToRequestQueue(stringRequest)
+            //当服务运行后，再次进入MusicActivity时把正在播放的音乐信息传递过去
             val bundle = Bundle()
             bundle.putInt(MusicConst.MUSIC_CURRENT_PROGRESS, mMediaPlayer.currentPosition)
             bundle.putInt(MusicConst.MUSIC_MAX_PROGRESS, mMediaPlayer.duration)
             bundle.putBoolean(MusicConst.MUSIC_IS_PLAYING, mMediaPlayer.isPlaying)
             bundle.putBoolean(MusicConst.HAS_INIT_MUSIC, hasInitMusic)
+
             //音乐持续时间
             val desc0 = MediaDescriptionCompat.Builder()
                 .setMediaId(0.toString())

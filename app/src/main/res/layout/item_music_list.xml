@@ -16,6 +16,7 @@
         android:id="@+id/text_music_name"
         android:layout_width="100dp"
         android:layout_height="18dp"
+        android:textSize="@dimen/text_size_12dp"
         app:layout_constraintStart_toEndOf="@+id/image_music"
         app:layout_constraintTop_toTopOf="@+id/image_music" />
 
@@ -23,6 +24,7 @@
         android:id="@+id/text_music_author"
         android:layout_width="100dp"
         android:layout_height="18dp"
+        android:textSize="@dimen/text_size_12dp"
         app:layout_constraintStart_toStartOf="@+id/text_music_name"
         app:layout_constraintTop_toBottomOf="@+id/text_music_name" />
 
