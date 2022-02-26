@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image_music"
+        android:layout_width="64dp"
+        android:layout_height="36dp"
+        android:background="@drawable/fillet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_music_name"
+        android:layout_width="240dp"
+        android:layout_height="18dp"
+        android:textSize="@dimen/text_size_12dp"
+        app:layout_constraintStart_toEndOf="@+id/image_music"
+        app:layout_constraintTop_toTopOf="@+id/image_music" />
+
+    <TextView
+        android:id="@+id/text_music_author"
+        android:layout_width="240dp"
+        android:layout_height="18dp"
+        android:textSize="@dimen/text_size_12dp"
+        app:layout_constraintStart_toStartOf="@+id/text_music_name"
+        app:layout_constraintTop_toBottomOf="@+id/text_music_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

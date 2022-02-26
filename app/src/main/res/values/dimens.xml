@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="text_size_12dp">12dp</dimen>
+
+    <dimen name="text_size_16dp">16dp</dimen>
+
+    <dimen name="text_size_20dp">20dp</dimen>
+
+    <dimen name="edit_text_size">12dp</dimen>
+
+    <dimen name="text_size_14dp">14dp</dimen>
+
+    <dimen name="split_line_width">1sp</dimen>
+</resources>

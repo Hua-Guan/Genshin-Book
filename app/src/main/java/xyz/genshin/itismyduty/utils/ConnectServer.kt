@@ -19,16 +19,16 @@ object ConnectServer {
     fun getOverviewImageUri(): JsonArray {
 
         //请求行
-        val urlStr = "http://genshin.itismyduty.xyz:8080/GenshinBook/"
+        val urlStr = "https://www.baidu.com/"
         val url = URL(urlStr)
         val urlConnection = url.openConnection()
         val httpURLConnection = urlConnection as HttpURLConnection
 
         //请求头
         httpURLConnection.doInput = true
-        httpURLConnection.doOutput = true
+        //httpURLConnection.doOutput = true
         httpURLConnection.useCaches = false
-        httpURLConnection.requestMethod = "POST"
+        httpURLConnection.requestMethod = "GET"
         httpURLConnection.setRequestProperty("Charset", "UTF-8")
         httpURLConnection.setRequestProperty(
             "Content-Type",
@@ -36,9 +36,9 @@ object ConnectServer {
         )
 
         //请求体
-        val os = httpURLConnection.outputStream
-        val param = "request=getOverviewImageUri"
-        os.write(param.toByteArray())
+        //val os = httpURLConnection.outputStream
+        //val param = "request=getOverviewImageUri"
+        //os.write(param.toByteArray())
 
         //返回
         val iis = httpURLConnection.inputStream
@@ -55,7 +55,7 @@ object ConnectServer {
         } while (true)
 
         val jsonStr = String(sbf)
-
+        println(jsonStr)
         return JsonParser.parseString(jsonStr).asJsonArray
 
     }

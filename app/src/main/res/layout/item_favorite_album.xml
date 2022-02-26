@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+    <TextView
+        android:id="@+id/favorite_album_name"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:text="默认"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_16dp"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/favorite_album_sum"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:text="0个内容"
+        android:textStyle="italic"
+        android:textSize="@dimen/text_size_12dp"
+        tools:ignore="RtlSymmetry" />
+
+</LinearLayout>

@@ -12,25 +12,26 @@ import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import xyz.genshin.itismyduty.R
-import xyz.genshin.itismyduty.model.MysqlConnect
-import xyz.genshin.itismyduty.model.RoleBean
-import xyz.genshin.itismyduty.model.RoleGridViewAdapter
-import xyz.genshin.itismyduty.utils.ConnectServer
+import xyz.genshin.itismyduty.model.bean.RoleBean
+import xyz.genshin.itismyduty.model.adapter.RoleGridViewAdapter
 import xyz.genshin.itismyduty.utils.VolleyInstance
-import kotlin.concurrent.thread
 
 /**
  * @author GuanHua
  */
 class RoleFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    companion object{
+
+        const val GET_ALL_ROLE_IMAGE_URI = "getAllRoleImageUri"
+        const val DATABASE_NAME = "GenshinBook"
+
+    }
+
     private var mView: View? = null
     private var list: List<RoleBean>? = null
     private var handler = Handler(Looper.myLooper()!!)
@@ -62,7 +63,7 @@ class RoleFragment : Fragment() {
             gridView = view.findViewById(R.id.role)
             list = ArrayList()
             val stringRequest = StringRequest(
-                Request.Method.POST, "http://genshin.itismyduty.xyz:8080/GenshinBook?request=getAllRoleImageUri",
+                Request.Method.GET, "http://genshin.itismyduty.xyz:8080/$DATABASE_NAME?request=$GET_ALL_ROLE_IMAGE_URI",
                 { response ->
                     val jsonArray = JsonParser.parseString(response).asJsonArray
                     for (item in jsonArray){
