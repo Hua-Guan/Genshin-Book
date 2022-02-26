@@ -41,7 +41,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/video_name"
+        android:id="@+id/video_title"
         android:layout_width="320dp"
         android:layout_height="24dp"
         android:layout_gravity="center_horizontal"/>

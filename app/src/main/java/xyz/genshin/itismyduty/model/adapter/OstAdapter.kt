@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.bean.OstBean
@@ -39,8 +40,9 @@ class OstAdapter(private val context: Context,
             mView = LayoutInflater.from(context).inflate(R.layout.item_ost, parent, false)
             val mHolder = Holder()
             mHolder.mVideoView = mView.findViewById(R.id.video)
-            mHolder.mVideoName = mView.findViewById(R.id.video_name)
             mHolder.mVideoPlay = mView.findViewById(R.id.img_video_play)
+            mHolder.mVideoDuration = mView.findViewById(R.id.video_all_time)
+            mHolder.mVideoTitle = mView.findViewById(R.id.video_title)
 
             //val layoutParams = LinearLayout.LayoutParams(getScreenWidth(), (0.56*getScreenWidth()).toInt())
             //mHolder.mVideoView.layoutParams = layoutParams
@@ -48,7 +50,9 @@ class OstAdapter(private val context: Context,
             val mMediaControl = MediaController(context)
             mHolder.mVideoView.setVideoURI(Uri.parse(TEST_URI))
             mHolder.mVideoView.setMediaController(mMediaControl)
-            Glide.with(context).asBitmap().load(URI_IMAGE)
+            Glide.with(context).asBitmap().load(list[position].mVideoViewCoverUri)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(object : SimpleTarget<Bitmap>() {
                     override fun onResourceReady(
                         resource: Bitmap,
@@ -58,6 +62,9 @@ class OstAdapter(private val context: Context,
                         mHolder.mVideoView.background = drawable
                     }
                 })
+            mHolder.mVideoDuration.text = list[position].mVideoViewDuration
+            mHolder.mVideoTitle.text = list[position].mVideoViewTitle
+
             mMediaControl.show(3000)
 
             mHolder.mVideoView.setOnTouchListener(object : View.OnTouchListener{
@@ -74,8 +81,6 @@ class OstAdapter(private val context: Context,
                 }
 
             })
-
-            mHolder.mVideoName.text = "test"
 
             mView.tag = mHolder
         }else{
@@ -100,8 +105,9 @@ class OstAdapter(private val context: Context,
 
     class Holder{
         lateinit var mVideoView: VideoView
-        lateinit var mVideoName: TextView
+        lateinit var mVideoTitle: TextView
         lateinit var mVideoPlay: ImageView
+        lateinit var mVideoDuration: TextView
     }
 
 }
