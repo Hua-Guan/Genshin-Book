@@ -2,27 +2,35 @@ package xyz.genshin.itismyduty.model.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.transition.Transition
 import android.util.Log
 import android.view.*
 import android.widget.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
 import xyz.genshin.itismyduty.R
+import xyz.genshin.itismyduty.model.bean.OstBean
 
-class OstAdapter(private val context: Context): BaseAdapter() {
+class OstAdapter(private val context: Context,
+                private val list: List<OstBean>): BaseAdapter() {
     companion object{
-        const val TEST_URI = "http://home.itismyduty.xyz:500/y2meta.com-City%20of%20Winds%20and%20Idylls%20-%20Disc%202_%20The%20Horizon%20of%20Dandelion%EF%BD%9CGenshin%20Impact-(1080p).mp4"
+        const val TEST_URI = "https://genshin.itismyduty.xyz/OST/1.mp4"
+        const val URI_IMAGE = "https://genshin.itismyduty.xyz/sl2.jpg"
     }
     private var isFistLoadVideo = true
     override fun getCount(): Int {
-        return 1
+        return list.size
     }
 
     override fun getItem(position: Int): Any {
-        return position
+        return list[position]
     }
 
     override fun getItemId(position: Int): Long {
-        return position.toLong()
+        return list[position].mVideoId.toLong()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
@@ -32,14 +40,24 @@ class OstAdapter(private val context: Context): BaseAdapter() {
             val mHolder = Holder()
             mHolder.mVideoView = mView.findViewById(R.id.video)
             mHolder.mVideoName = mView.findViewById(R.id.video_name)
+            mHolder.mVideoPlay = mView.findViewById(R.id.img_video_play)
 
-            val layoutParams = LinearLayout.LayoutParams(getScreenWidth(), (0.56*getScreenWidth()).toInt())
-            Log.i("width", getScreenWidth().toString())
-            mHolder.mVideoView.layoutParams = layoutParams
+            //val layoutParams = LinearLayout.LayoutParams(getScreenWidth(), (0.56*getScreenWidth()).toInt())
+            //mHolder.mVideoView.layoutParams = layoutParams
             //
             val mMediaControl = MediaController(context)
             mHolder.mVideoView.setVideoURI(Uri.parse(TEST_URI))
             mHolder.mVideoView.setMediaController(mMediaControl)
+            Glide.with(context).asBitmap().load(URI_IMAGE)
+                .into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                    ) {
+                        val drawable = BitmapDrawable(resource)
+                        mHolder.mVideoView.background = drawable
+                    }
+                })
             mMediaControl.show(3000)
 
             mHolder.mVideoView.setOnTouchListener(object : View.OnTouchListener{
@@ -47,6 +65,8 @@ class OstAdapter(private val context: Context): BaseAdapter() {
                 override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                     if (event != null) {
                         if (event.action == MotionEvent.ACTION_DOWN){
+                            mHolder.mVideoView.background = null
+                            mHolder.mVideoPlay.background = null
                             mMediaControl.show()
                         }
                     }
@@ -81,6 +101,7 @@ class OstAdapter(private val context: Context): BaseAdapter() {
     class Holder{
         lateinit var mVideoView: VideoView
         lateinit var mVideoName: TextView
+        lateinit var mVideoPlay: ImageView
     }
 
 }

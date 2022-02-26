@@ -85,7 +85,6 @@ class HomeFragment: Fragment() {
             { response ->
                 val list = ArrayList<OverviewBean>()
                 val jsonArray = JsonParser.parseString(response).asJsonArray
-                println(jsonArray)
                 for (item in jsonArray){
                     val bean = Gson().fromJson(item, OverviewBean::class.java)
                     list.add(bean)
