@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/activity_enemy.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/activity_favorite.xml" value="0.22780797101449277" />
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/activity_favority.xml" value="0.22780797101449277" />
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/activity_forget_password.xml" value="0.22780797101449277" />
@@ -20,6 +21,7 @@
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/fragment_role.xml" value="0.2210144927536232" />
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/item_favorite_album.xml" value="0.2857142857142857" />
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/item_music_list.xml" value="0.22780797101449277" />
+        <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/item_ost.xml" value="0.25271739130434784" />
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/item_ost_list.xml" value="0.22780797101449277" />
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/item_overview.xml" value="0.2210144927536232" />
         <entry key="..\:/AndroidProject/Genshin-Book/app/src/main/res/layout/notification_control.xml" value="0.2563405797101449" />
