@@ -11,7 +11,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="32dp"
         android:gravity="center"
-        android:text="登录或注册"
+        android:text="登入或注册"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

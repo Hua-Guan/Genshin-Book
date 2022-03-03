@@ -20,6 +20,7 @@ import xyz.genshin.itismyduty.utils.VolleyInstance
 import xyz.genshin.itismyduty.view.enemy.EnemyActivity
 import xyz.genshin.itismyduty.view.ost.OstActivity
 import xyz.genshin.itismyduty.view.role.RoleActivity
+import xyz.genshin.itismyduty.view.upload.UploadMusicActivity
 
 /**
  * @author GuanHua
@@ -30,6 +31,7 @@ class HomeFragment: Fragment() {
         const val ROLE_ACTIVITY = 0
         const val ENEMY_ACTIVITY = 1
         const val OST_ACTIVITY = 2
+        const val UPLOAD_MUSIC_ACTIVITY = 3
     }
 
     private var mView: View? = null
@@ -70,6 +72,11 @@ class HomeFragment: Fragment() {
                 }else if (position == OST_ACTIVITY){
 
                     val intent = Intent(activity, OstActivity::class.java)
+                    startActivity(intent)
+
+                }else if (position == UPLOAD_MUSIC_ACTIVITY){
+
+                    val intent = Intent(activity, UploadMusicActivity::class.java)
                     startActivity(intent)
 
                 }

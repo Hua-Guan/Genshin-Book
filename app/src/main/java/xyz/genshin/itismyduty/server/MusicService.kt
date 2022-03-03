@@ -116,37 +116,41 @@ class MusicService : MediaBrowserServiceCompat() {
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
         result.detach()
-            //当服务运行后，再次进入MusicActivity时把正在播放的音乐信息传递过去
-            val bundle = Bundle()
-            bundle.putInt(MusicConst.MUSIC_CURRENT_PROGRESS, mMediaPlayer.currentPosition)
-            bundle.putInt(MusicConst.MUSIC_MAX_PROGRESS, mMediaPlayer.duration)
-            bundle.putBoolean(MusicConst.MUSIC_IS_PLAYING, mMediaPlayer.isPlaying)
-            bundle.putBoolean(MusicConst.HAS_INIT_MUSIC, hasInitMusic)
-            mMusicList = ArrayList()
-            val stringRequest = StringRequest("http://genshin.itismyduty.xyz:8080/GenshinBook/musicBean",
-                {respond ->
+        //当服务运行后，再次进入MusicActivity时把正在播放的音乐信息传递过去
+        val bundle = Bundle()
+        bundle.putInt(MusicConst.MUSIC_CURRENT_PROGRESS, mMediaPlayer.currentPosition)
+        bundle.putInt(MusicConst.MUSIC_MAX_PROGRESS, mMediaPlayer.duration)
+        bundle.putBoolean(MusicConst.MUSIC_IS_PLAYING, mMediaPlayer.isPlaying)
+        bundle.putBoolean(MusicConst.HAS_INIT_MUSIC, hasInitMusic)
+        mMusicList = ArrayList()
+        val stringRequest = StringRequest("http://genshin.itismyduty.xyz:8080/GenshinBook/musicBean",
+                { respond ->
                     val string = String(respond.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8)
                     val jsonArray = JsonParser.parseString(string).asJsonArray
                     var id = -1
-                    for (item in jsonArray){
-                        id ++
+                    for (item in jsonArray) {
+                        id++
                         val bean = Gson().fromJson(item, MusicBean::class.java)
-                        val desc = MediaDescriptionCompat.Builder()
-                            .setMediaId(id.toString())
-                            .setIconUri(Uri.parse(bean.musicCover))
-                            .setMediaUri(Uri.parse(bean.musicUri))
-                            .setTitle(bean.musicTitle)
-                            .setSubtitle(bean.musicAuthor)
-                            .setExtras(bundle)
-                            .build()
-                        val mediaItem = MediaBrowserCompat.MediaItem(desc, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-                        mMusicList.add(mediaItem)
+                        if (bean.musicAlbum == parentId) {
+                            val desc = MediaDescriptionCompat.Builder()
+                                .setMediaId(id.toString())
+                                .setIconUri(Uri.parse(bean.musicCover))
+                                .setMediaUri(Uri.parse(bean.musicUri))
+                                .setTitle(bean.musicTitle)
+                                .setSubtitle(bean.musicAuthor)
+                                .setExtras(bundle)
+                                .build()
+                            val mediaItem = MediaBrowserCompat.MediaItem(
+                                desc,
+                                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
+                            )
+                            mMusicList.add(mediaItem)
+                        }
                     }
                     result.sendResult(mMusicList)
                 }
-            ){}
-            VolleyInstance.getInstance(applicationContext).addToRequestQueue(stringRequest)
-
+            ) {}
+        VolleyInstance.getInstance(applicationContext).addToRequestQueue(stringRequest)
     }
 
     private val mSessionCallback = object : MediaSessionCompat.Callback(){

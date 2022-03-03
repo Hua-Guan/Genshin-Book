@@ -17,6 +17,7 @@ import com.google.gson.JsonParser
 import xyz.genshin.itismyduty.R
 import xyz.genshin.itismyduty.model.adapter.MusicGridAdapter
 import xyz.genshin.itismyduty.model.bean.MusicAlbumGridBean
+import xyz.genshin.itismyduty.server.MusicConst
 import xyz.genshin.itismyduty.utils.VolleyInstance
 
 /**
@@ -95,7 +96,9 @@ class MusicFragment: Fragment() {
     private fun showMusicList(){
         mGrid?.onItemClickListener = AdapterView.OnItemClickListener {
                 parent, view, position, id ->
+            val item = mGrid?.getItemAtPosition(position) as MusicAlbumGridBean
             val intent = Intent(activity, MusicListActivity::class.java)
+            intent.putExtra(MusicConst.MUSIC_ALBUM, item.albumName)
             startActivity(intent)
         }
     }

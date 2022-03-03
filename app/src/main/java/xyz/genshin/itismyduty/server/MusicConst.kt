@@ -21,6 +21,7 @@ class MusicConst {
         const val HAS_INIT_MUSIC = "HAS_INIT_MUSIC"
         const val MUSIC_TITLE = "MUSIC_TITLE"
         const val MUSIC_AUTHOR = "MUSIC_AUTHOR"
+        const val MUSIC_ALBUM = "MUSIC_ALBUM"
 
     }
 }

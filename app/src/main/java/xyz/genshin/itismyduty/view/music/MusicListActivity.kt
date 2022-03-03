@@ -245,46 +245,49 @@ class MusicListActivity: AppCompatActivity() {
     }
 
     private fun initListView(){
-        mMusicClient.subscribe(MusicConst.CITY_OF_WINDS_AND_IDYLLS, object : MediaBrowserCompat.SubscriptionCallback() {
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onChildrenLoaded(
-                parentId: String,
-                children: MutableList<MediaBrowserCompat.MediaItem>
-            ) {
-                mMusicList = children
-                val mList = ArrayList<MusicListBean>()
-                for ((id, item) in children.withIndex()){
-                    val bean = MusicListBean()
-                    bean.mMusicImageUri = item.description.iconUri.toString()
-                    bean.mMusicId = id
-                    bean.mMusicAuthor = item.description.subtitle.toString()
-                    bean.mMusicName = item.description.title.toString()
+        val mMusicAlbum = intent.getStringExtra(MusicConst.MUSIC_ALBUM)
+        if (mMusicAlbum != null) {
+            mMusicClient.subscribe(mMusicAlbum, object : MediaBrowserCompat.SubscriptionCallback() {
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun onChildrenLoaded(
+                    parentId: String,
+                    children: MutableList<MediaBrowserCompat.MediaItem>
+                ) {
+                    mMusicList = children
+                    val mList = ArrayList<MusicListBean>()
+                    for ((id, item) in children.withIndex()){
+                        val bean = MusicListBean()
+                        bean.mMusicImageUri = item.description.iconUri.toString()
+                        bean.mMusicId = id
+                        bean.mMusicAuthor = item.description.subtitle.toString()
+                        bean.mMusicName = item.description.title.toString()
 
-                    mList.add(bean)
-                }
-                val mMusicListAdapter = MusicListAdapter(this@MusicListActivity, mList)
-
-                mListView?.adapter = mMusicListAdapter
-                //设置SeekBar的值
-                val extras = children[0].description.extras
-                if (extras != null) {
-                    if (extras.getBoolean(MusicConst.MUSIC_IS_PLAYING, false)){
-                        setSeekBarMax(extras.getInt(MUSIC_MAX_PROGRESS, 0))
-                        setSeekBarProgress(extras.getInt(MusicConst.MUSIC_CURRENT_PROGRESS, 0))
-                        setSeekBarTextMax(mMusicSeekBar.max)
-                        setSeekBarAnimation()
-                        //设置播放图标
-                        mPlayMusic.setImageResource(R.drawable.ic_pause)
-                    }else{
-                        setSeekBarMax(extras.getInt(MUSIC_MAX_PROGRESS, 0))
-                        setSeekBarProgress(extras.getInt(MusicConst.MUSIC_CURRENT_PROGRESS, 0))
-                        mMusicAllTime.text = Tools.formatSeconds(ceil(((mMusicSeekBar.max).toDouble() / 1000)).toInt())
+                        mList.add(bean)
                     }
+                    val mMusicListAdapter = MusicListAdapter(this@MusicListActivity, mList)
+
+                    mListView?.adapter = mMusicListAdapter
+                    //设置SeekBar的值
+                    val extras = children[0].description.extras
+                    if (extras != null) {
+                        if (extras.getBoolean(MusicConst.MUSIC_IS_PLAYING, false)){
+                            setSeekBarMax(extras.getInt(MUSIC_MAX_PROGRESS, 0))
+                            setSeekBarProgress(extras.getInt(MusicConst.MUSIC_CURRENT_PROGRESS, 0))
+                            setSeekBarTextMax(mMusicSeekBar.max)
+                            setSeekBarAnimation()
+                            //设置播放图标
+                            mPlayMusic.setImageResource(R.drawable.ic_pause)
+                        }else{
+                            setSeekBarMax(extras.getInt(MUSIC_MAX_PROGRESS, 0))
+                            setSeekBarProgress(extras.getInt(MusicConst.MUSIC_CURRENT_PROGRESS, 0))
+                            mMusicAllTime.text = Tools.formatSeconds(ceil(((mMusicSeekBar.max).toDouble() / 1000)).toInt())
+                        }
+                    }
+                    //设置当第一次启动service时的music
+                    initMusic()
                 }
-                //设置当第一次启动service时的music
-                initMusic()
-            }
-        })
+            })
+        }
     }
 
     private fun initMusicControl(){

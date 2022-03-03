@@ -38,5 +38,17 @@
         android:background="@color/split_line"
         app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
 
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:text="还没有浏览记录鸭"
+        android:gravity="center"
+        android:textSize="32dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_split" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

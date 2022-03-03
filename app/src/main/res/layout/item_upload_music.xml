@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="24dp">
+
+        <TextView
+            android:id="@+id/text_music_title"
+            android:layout_width="160dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="8dp"
+            android:text="音乐名称"
+            android:textSize="@dimen/text_size_16dp"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/text_music_progress"
+            android:layout_width="48dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="8dp"
+            android:text="进度"
+            android:textSize="@dimen/text_size_16dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
